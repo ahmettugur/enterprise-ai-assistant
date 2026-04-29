@@ -1050,8 +1050,6 @@ Kullanıcı: "Son 3 ayın şikayet analizi"
 
 **Örnek Tablolar:**
 
-- `CALLS` - Çağrı kayıtları
-- `CALL_DETAILS` - Çağrı detayları
 - `CUSTOMER_FEEDBACK` - Müşteri geri bildirimleri
 - `AGENT_PERFORMANCE` - Ajan performans metrikleri
 
