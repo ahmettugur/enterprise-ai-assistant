@@ -26,7 +26,7 @@
 
 ## 🎬 Demo
 
-https://github.com/user-attachments/assets/6f3e76d8-fbdd-4b9c-9cc3-ce54629114f6
+https://github.com/user-attachments/assets/8af663aa-a8e7-4e8c-953d-880fb12f00dd
 
 > **Not:** Video GitHub'da görüntülenemiyorsa, dosyayı `docs/media/1767601282558.mp4` konumunda bulabilirsiniz.
 
