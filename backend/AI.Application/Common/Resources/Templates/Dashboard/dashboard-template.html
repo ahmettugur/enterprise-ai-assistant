@@ -1,0 +1,304 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard</title>
+    
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <!-- ApexCharts -->
+    <script src="https://cdn.jsdelivr.net/npm/apexcharts@latest"></script>
+    
+    <!-- jQuery & DataTables -->
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <link rel="stylesheet" href="https://cdn.datatables.net/1.13.6/css/jquery.dataTables.min.css">
+    <script src="https://cdn.datatables.net/1.13.6/js/jquery.dataTables.min.js"></script>
+    
+    <!-- DataTables Buttons -->
+    <link rel="stylesheet" href="https://cdn.datatables.net/buttons/2.4.1/css/buttons.dataTables.min.css">
+    <script src="https://cdn.datatables.net/buttons/2.4.1/js/dataTables.buttons.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.53/pdfmake.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.53/vfs_fonts.js"></script>
+    <script src="https://cdn.datatables.net/buttons/2.4.1/js/buttons.html5.min.js"></script>
+    
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="./css/variables.css">
+    <link rel="stylesheet" href="./css/reports.css">
+    
+    <style>
+        /* Full width layout */
+        html, body {
+            width: 100%;
+            margin: 0;
+            padding: 0;
+        }
+        
+        .kpi-card {
+            transition: transform 0.2s, box-shadow 0.2s;
+        }
+        .kpi-card:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.1);
+        }
+        .chart-container {
+            min-height: 400px;
+            width: 100%;
+        }
+        .chart-card {
+            width: 100%;
+        }
+        .analysis-card {
+            transition: all 0.2s;
+        }
+        .analysis-card:hover {
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+        }
+        
+        /* DataTables full width */
+        #data-table_wrapper {
+            width: 100% !important;
+        }
+        
+        /* ApexCharts responsive */
+        .apexcharts-canvas {
+            width: 100% !important;
+        }
+
+        /* Border Left - Analysis Cards */
+        .border-l-4 {
+            border-left-width: 4px !important;
+        }
+
+        .border-l-emerald-500 {
+            border-left-color: rgb(16 185 129) !important;
+        }
+
+        .border-l-amber-400 {
+            border-left-color: rgb(251 191 36) !important;
+        }
+
+        .border-l-violet-500 {
+            border-left-color: rgb(139 92 246) !important;
+        }
+
+        .border-l-blue-500 {
+            border-left-color: rgb(59 130 246) !important;
+        }
+
+        .border-l-rose-500 {
+            border-left-color: rgb(244 63 94) !important;
+        }
+
+        .border-l-yellow-500 {
+            border-left-color: rgb(234 179 8) !important;
+        }
+
+        .border-l-fuchsia-500 {
+            border-left-color: rgb(217 70 239) !important;
+        }
+
+        /* Background Colors */
+        .bg-emerald-100 {
+            background-color: rgb(209 250 229) !important;
+        }
+
+        .bg-amber-100 {
+            background-color: rgb(254 243 199) !important;
+        }
+
+        .bg-violet-100 {
+            background-color: rgb(237 233 254) !important;
+        }
+
+        .bg-blue-100 {
+            background-color: rgb(219 234 254) !important;
+        }
+
+        .bg-rose-100 {
+            background-color: rgb(255 228 230) !important;
+        }
+
+        .bg-yellow-100 {
+            background-color: rgb(254 249 195) !important;
+        }
+
+        .bg-fuchsia-100 {
+            background-color: rgb(250 232 255) !important;
+        }
+
+        /* Text Colors */
+        .text-emerald-600 {
+            color: rgb(5 150 105) !important;
+        }
+
+        .text-amber-600 {
+            color: rgb(217 119 6) !important;
+        }
+
+        .text-violet-600 {
+            color: rgb(124 58 237) !important;
+        }
+
+        .text-blue-600 {
+            color: rgb(37 99 235) !important;
+        }
+
+        .text-rose-600 {
+            color: rgb(225 29 72) !important;
+        }
+
+        .text-yellow-600 {
+            color: rgb(202 138 4) !important;
+        }
+
+        .text-fuchsia-600 {
+            color: rgb(192 38 211) !important;
+        }
+
+        /* Distribution Bar Colors */
+        .bg-emerald-500 {
+            background-color: rgb(16 185 129) !important;
+        }
+
+        .bg-blue-500 {
+            background-color: rgb(59 130 246) !important;
+        }
+
+        .bg-violet-500 {
+            background-color: rgb(139 92 246) !important;
+        }
+
+        .bg-cyan-500 {
+            background-color: rgb(6 182 212) !important;
+        }
+
+        .bg-teal-500 {
+            background-color: rgb(20 184 166) !important;
+        }
+
+        .bg-indigo-500 {
+            background-color: rgb(99 102 241) !important;
+        }
+    </style>
+</head>
+<body class="bg-gray-50 min-h-screen">
+    
+    <!-- Loading Overlay -->
+    <div id="loading-overlay" class="fixed inset-0 bg-white bg-opacity-90 flex items-center justify-center z-50">
+        <div class="text-center">
+            <div class="animate-spin rounded-full h-16 w-16 border-t-4 border-b-4 border-blue-600 mx-auto mb-4"></div>
+            <p class="text-gray-600 text-lg">Dashboard yükleniyor...</p>
+        </div>
+    </div>
+
+    <div class="w-full px-4 py-6">
+        
+        <!-- Header -->
+        <div class="bg-white rounded-2xl shadow-lg p-6 mb-6">
+            <div class="flex items-center justify-between">
+                <div>
+                    <h1 id="dashboard-title" class="text-2xl font-bold text-gray-800"></h1>
+                </div>
+                <div class="flex items-center gap-2">
+                    <span class="px-3 py-1 bg-green-100 text-green-700 rounded-full text-sm font-medium">
+                        <span id="record-count">0</span> Kayıt
+                    </span>
+                    <span class="px-3 py-1 bg-blue-100 text-blue-700 rounded-full text-sm font-medium">
+                        <span id="generation-time"></span>
+                    </span>
+                </div>
+            </div>
+        </div>
+
+        <!-- KPI Cards Container -->
+        <div id="kpi-container" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 mb-6">
+            <!-- KPI kartları buraya render edilecek -->
+        </div>
+
+        <!-- Charts Container -->
+        <div id="charts-container" class="grid grid-cols-1 xl:grid-cols-2 gap-6 mb-6">
+            <!-- Grafikler buraya render edilecek -->
+        </div>
+
+        <!-- DataTable Container -->
+        <div class="bg-white rounded-2xl shadow-lg p-6 mb-6">
+            <div class="flex items-center justify-between mb-4">
+                <h3 class="text-lg font-semibold text-gray-800">📋 Detaylı Veri Tablosu</h3>
+                <div id="table-buttons" class="flex gap-2">
+                    <!-- Export butonları DataTables tarafından eklenecek -->
+                </div>
+            </div>
+            <div class="overflow-x-auto">
+                <table id="data-table" class="display w-full text-sm">
+                    <!-- Tablo içeriği render edilecek -->
+                </table>
+            </div>
+        </div>
+
+        <!-- AI Analysis Container -->
+        <div id="ai-analysis-container" class="bg-white rounded-2xl shadow-lg overflow-hidden">
+            <div class="bg-gradient-to-r from-indigo-600 to-purple-600 px-6 py-4">
+                <div class="flex items-center gap-3">
+                    <span class="text-3xl">🔮</span>
+                    <div>
+                        <h3 class="text-xl font-bold text-white">Veri Analizi ve Öngörüler</h3>
+                        <p class="text-indigo-100 text-sm">AI destekli otomatik veri analizi</p>
+                    </div>
+                </div>
+            </div>
+            <div id="analysis-content" class="p-6">
+                <!-- Analiz içeriği render edilecek -->
+            </div>
+        </div>
+
+    </div>
+
+    <!-- Dashboard Renderer -->
+    <script src="./js/dashboard-renderer.js"></script>
+    
+    <script>
+        // Dashboard başlatma
+        document.addEventListener('DOMContentLoaded', async function() {
+            try {
+                // Veri ve konfigürasyonu yükle
+                const [dataResponse, configResponse] = await Promise.all([
+                    fetch('./js/data.json'),
+                    fetch('./js/config.json')
+                ]);
+
+                if (!dataResponse.ok || !configResponse.ok) {
+                    throw new Error('Dosyalar yüklenemedi');
+                }
+
+                const data = await dataResponse.json();
+                const config = await configResponse.json();
+
+                // Başlık ve meta bilgileri güncelle
+                document.getElementById('dashboard-title').textContent = data.summary || 'Dashboard';
+                document.getElementById('record-count').textContent = data.data?.length || 0;
+                document.getElementById('generation-time').textContent = new Date().toLocaleString('tr-TR');
+
+                // Dashboard renderer'ı başlat
+                const renderer = new DashboardRenderer(data.data, config);
+                await renderer.render();
+
+                // Loading overlay'i kaldır
+                document.getElementById('loading-overlay').style.display = 'none';
+
+            } catch (error) {
+                console.error('Dashboard yüklenirken hata:', error);
+                document.getElementById('loading-overlay').innerHTML = `
+                    <div class="text-center">
+                        <span class="text-6xl">❌</span>
+                        <p class="text-red-600 text-lg mt-4">Dashboard yüklenemedi</p>
+                        <p class="text-gray-500 mt-2">${error.message}</p>
+                    </div>
+                `;
+            }
+        });
+    </script>
+</body>
+</html>

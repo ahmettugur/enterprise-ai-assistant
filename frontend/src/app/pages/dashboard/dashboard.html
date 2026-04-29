@@ -1,0 +1,406 @@
+<div class="dashboard-container">
+  <!-- Header -->
+  <div class="dashboard-header">
+    <div class="header-left">
+      <p-button icon="pi pi-arrow-left" [text]="true" (click)="goBack()" pTooltip="Geri"></p-button>
+      <h1>Geri Bildirim Dashboard</h1>
+    </div>
+    <div class="header-right">
+      <p-select 
+        [options]="daysOptions" 
+        [(ngModel)]="selectedDays"
+        optionLabel="label"
+        optionValue="value"
+        (onChange)="onDaysChange($event.value)"
+        placeholder="Süre seçin">
+      </p-select>
+    </div>
+  </div>
+
+  <!-- Overview Cards -->
+  <div class="stats-grid">
+    @if (isLoading()) {
+      @for (i of [1, 2, 3, 4]; track i) {
+        <p-card>
+          <p-skeleton height="80px"></p-skeleton>
+        </p-card>
+      }
+    } @else if (overview()) {
+      <!-- Total Feedbacks -->
+      <p-card styleClass="stat-card">
+        <div class="stat-content">
+          <div class="stat-icon bg-blue-100">
+            <i class="pi pi-comments text-blue-600"></i>
+          </div>
+          <div class="stat-info">
+            <span class="stat-label">Toplam Geri Bildirim</span>
+            <span class="stat-value">{{ overview()!.totalFeedbacks | number }}</span>
+          </div>
+        </div>
+      </p-card>
+
+      <!-- Satisfaction Rate -->
+      <p-card styleClass="stat-card">
+        <div class="stat-content">
+          <div class="stat-icon bg-green-100">
+            <i class="pi pi-chart-line text-green-600"></i>
+          </div>
+          <div class="stat-info">
+            <span class="stat-label">Memnuniyet Oranı</span>
+            <span class="stat-value">
+              {{ overview()!.satisfactionRate | number:'1.1-1' }}%
+              <span [class]="getTrendClass()" class="trend-indicator">
+                <i [class]="getTrendIcon()"></i>
+                {{ overview()!.trendChange | number:'1.1-1' }}%
+              </span>
+            </span>
+          </div>
+        </div>
+      </p-card>
+
+      <!-- Pending Improvements -->
+      <p-card styleClass="stat-card">
+        <div class="stat-content">
+          <div class="stat-icon bg-yellow-100">
+            <i class="pi pi-clock text-yellow-600"></i>
+          </div>
+          <div class="stat-info">
+            <span class="stat-label">Bekleyen İyileştirme</span>
+            <span class="stat-value">{{ overview()!.pendingImprovements | number }}</span>
+          </div>
+        </div>
+      </p-card>
+
+      <!-- Applied Improvements -->
+      <p-card styleClass="stat-card">
+        <div class="stat-content">
+          <div class="stat-icon bg-purple-100">
+            <i class="pi pi-check-circle text-purple-600"></i>
+          </div>
+          <div class="stat-info">
+            <span class="stat-label">Uygulanan İyileştirme</span>
+            <span class="stat-value">{{ overview()!.appliedImprovements | number }}</span>
+          </div>
+        </div>
+      </p-card>
+    }
+  </div>
+
+  <!-- Charts Row -->
+  <div class="charts-grid">
+    <!-- Trends Chart -->
+    <p-card header="Geri Bildirim Trendi" styleClass="chart-card">
+      @if (isLoadingTrends()) {
+        <p-skeleton height="300px"></p-skeleton>
+      } @else {
+        <div class="chart-container">
+          <canvas id="trendsChart"></canvas>
+        </div>
+      }
+    </p-card>
+
+    <!-- Category Chart -->
+    <p-card header="Kategori Dağılımı" styleClass="chart-card">
+      @if (isLoadingTrends()) {
+        <p-skeleton height="300px"></p-skeleton>
+      } @else {
+        <div class="chart-container">
+          <canvas id="categoryChart"></canvas>
+        </div>
+      }
+    </p-card>
+  </div>
+
+  <!-- Tabs for Improvements and Reports -->
+  <p-tabs value="0">
+    <p-tablist>
+      <p-tab value="0">Prompt İyileştirmeleri</p-tab>
+      <p-tab value="1">Analiz Raporları</p-tab>
+    </p-tablist>
+    <p-tabpanels>
+      <!-- Improvements Tab -->
+      <p-tabpanel value="0">
+        <div class="tab-toolbar">
+          <div class="filters">
+            <p-select 
+              [options]="statusOptions" 
+              [(ngModel)]="selectedStatus"
+              optionLabel="label"
+              optionValue="value"
+              (onChange)="onStatusChange($event.value)"
+              placeholder="Durum seçin">
+            </p-select>
+            <p-select 
+              [options]="priorityOptions" 
+              [(ngModel)]="selectedPriority"
+              optionLabel="label"
+              optionValue="value"
+              (onChange)="onPriorityChange($event.value)"
+              placeholder="Öncelik seçin">
+            </p-select>
+          </div>
+          @if (improvementStats()) {
+            <div class="improvement-stats">
+              <p-chip label="Beklemede: {{ improvementStats()!.pending }}" styleClass="chip-pending"></p-chip>
+              <p-chip label="İnceleniyor: {{ improvementStats()!.underReview }}" styleClass="chip-review"></p-chip>
+              <p-chip label="Uygulandı: {{ improvementStats()!.applied }}" styleClass="chip-applied"></p-chip>
+              <p-chip label="Reddedildi: {{ improvementStats()!.rejected }}" styleClass="chip-rejected"></p-chip>
+            </div>
+          }
+        </div>
+
+        @if (isLoadingImprovements()) {
+          <p-skeleton height="300px"></p-skeleton>
+        } @else {
+          <p-table 
+            [value]="improvements()" 
+            [tableStyle]="{'min-width': '60rem'}"
+            styleClass="p-datatable-sm p-datatable-striped">
+            <ng-template #header>
+              <tr>
+                <th>Kategori</th>
+                <th>Sorun</th>
+                <th>Öneri</th>
+                <th>Öncelik</th>
+                <th>Durum</th>
+                <th>Tarih</th>
+                <th>İşlemler</th>
+              </tr>
+            </ng-template>
+            <ng-template #body let-improvement>
+              <tr>
+                <td>
+                  <p-chip [label]="improvement.category"></p-chip>
+                </td>
+                <td class="issue-cell">
+                  <span [pTooltip]="improvement.issue" tooltipPosition="top">
+                    {{ improvement.issue | slice:0:80 }}{{ improvement.issue.length > 80 ? '...' : '' }}
+                  </span>
+                </td>
+                <td class="suggestion-cell">
+                  <span [pTooltip]="improvement.suggestion" tooltipPosition="top">
+                    {{ improvement.suggestion | slice:0:100 }}{{ improvement.suggestion.length > 100 ? '...' : '' }}
+                  </span>
+                </td>
+                <td>
+                  <p-tag 
+                    [value]="getPriorityLabel(improvement.priority)" 
+                    [severity]="getPrioritySeverity(improvement.priority)">
+                  </p-tag>
+                </td>
+                <td>
+                  <p-tag 
+                    [value]="getStatusLabel(improvement.status)" 
+                    [severity]="getStatusSeverity(improvement.status)">
+                  </p-tag>
+                </td>
+                <td>{{ formatDate(improvement.createdAt) }}</td>
+                <td>
+                  <div class="action-buttons">
+                    @if (improvement.status === 'Pending') {
+                      <p-button 
+                        icon="pi pi-eye" 
+                        [text]="true" 
+                        severity="info"
+                        pTooltip="İncelemeye Al"
+                        (click)="startReview(improvement)">
+                      </p-button>
+                    }
+                    @if (improvement.status === 'Pending' || improvement.status === 'UnderReview') {
+                      <p-button 
+                        icon="pi pi-check" 
+                        [text]="true" 
+                        severity="success"
+                        pTooltip="Onayla"
+                        (click)="openApproveModal(improvement)">
+                      </p-button>
+                      <p-button 
+                        icon="pi pi-times" 
+                        [text]="true" 
+                        severity="danger"
+                        pTooltip="Reddet"
+                        (click)="rejectImprovement(improvement)">
+                      </p-button>
+                    }
+                  </div>
+                </td>
+              </tr>
+            </ng-template>
+            <ng-template #emptymessage>
+              <tr>
+                <td colspan="7" class="text-center p-4">
+                  <i class="pi pi-inbox text-4xl text-gray-300 mb-2"></i>
+                  <p class="text-gray-500">Henüz iyileştirme önerisi bulunmuyor</p>
+                </td>
+              </tr>
+            </ng-template>
+          </p-table>
+
+          @if (totalRecords() > pageSize()) {
+            <p-paginator 
+              [rows]="pageSize()" 
+              [totalRecords]="totalRecords()"
+              [rowsPerPageOptions]="[10, 20, 50]"
+              (onPageChange)="onPageChange($event)">
+            </p-paginator>
+          }
+        }
+      </p-tabpanel>
+
+      <!-- Reports Tab -->
+      <p-tabpanel value="1">
+        @if (isLoadingReports()) {
+          <p-skeleton height="200px"></p-skeleton>
+        } @else {
+          <p-table 
+            [value]="reports()" 
+            [tableStyle]="{'min-width': '40rem'}"
+            styleClass="p-datatable-sm p-datatable-striped">
+            <ng-template #header>
+              <tr>
+                <th>Analiz Tarihi</th>
+                <th>Analiz Edilen Geri Bildirim</th>
+                <th>Memnuniyet Skoru</th>
+                <th>İşlemler</th>
+              </tr>
+            </ng-template>
+            <ng-template #body let-report>
+              <tr>
+                <td>{{ formatDateTime(report.analysisDate) }}</td>
+                <td>
+                  <p-badge [value]="report.totalFeedbacksAnalyzed" severity="info"></p-badge>
+                </td>
+                <td>
+                  <div class="score-cell">
+                    <p-progressbar 
+                      [value]="report.satisfactionScore" 
+                      [showValue]="false"
+                      styleClass="score-bar">
+                    </p-progressbar>
+                    <span>{{ report.satisfactionScore | number:'1.1-1' }}%</span>
+                  </div>
+                </td>
+                <td>
+                  <p-button 
+                    icon="pi pi-eye" 
+                    label="Detay"
+                    [text]="true"
+                    (click)="openReportDetail(report)">
+                  </p-button>
+                </td>
+              </tr>
+            </ng-template>
+            <ng-template #emptymessage>
+              <tr>
+                <td colspan="4" class="text-center p-4">
+                  <i class="pi pi-file text-4xl text-gray-300 mb-2"></i>
+                  <p class="text-gray-500">Henüz analiz raporu bulunmuyor</p>
+                </td>
+              </tr>
+            </ng-template>
+          </p-table>
+        }
+      </p-tabpanel>
+    </p-tabpanels>
+  </p-tabs>
+</div>
+
+<!-- Report Detail Modal -->
+<p-dialog 
+  header="Analiz Raporu Detayı" 
+  [(visible)]="showReportModal" 
+  [modal]="true" 
+  [style]="{width: '70vw', maxHeight: '80vh'}"
+  [draggable]="false"
+  [resizable]="false">
+  @if (selectedReport()) {
+    <div class="report-detail">
+      <div class="report-header">
+        <div class="report-meta">
+          <span><i class="pi pi-calendar"></i> {{ formatDateTime(selectedReport()!.analysisDate) }}</span>
+          <span><i class="pi pi-comments"></i> {{ selectedReport()!.totalFeedbacksAnalyzed }} geri bildirim</span>
+          <span><i class="pi pi-chart-line"></i> {{ selectedReport()!.satisfactionScore | number:'1.1-1' }}% memnuniyet</span>
+        </div>
+      </div>
+
+      <p-divider></p-divider>
+
+      <h4>Özet</h4>
+      <p class="report-summary">{{ selectedReport()!.summary }}</p>
+
+      <h4>Önemli Bulgular</h4>
+      <ul class="insights-list">
+        @for (insight of selectedReport()!.keyInsights; track insight) {
+          <li>{{ insight }}</li>
+        }
+      </ul>
+
+      @if (selectedReport()!.improvements.length > 0) {
+        <h4>İyileştirme Önerileri</h4>
+        <div class="improvements-list">
+          @for (improvement of selectedReport()!.improvements; track improvement.id) {
+            <div class="improvement-item">
+              <div class="improvement-header">
+                <p-chip [label]="improvement.category"></p-chip>
+                <p-tag 
+                  [value]="getPriorityLabel(improvement.priority)" 
+                  [severity]="getPrioritySeverity(improvement.priority)">
+                </p-tag>
+                <p-tag 
+                  [value]="getStatusLabel(improvement.status)" 
+                  [severity]="getStatusSeverity(improvement.status)">
+                </p-tag>
+              </div>
+              <p class="improvement-issue"><strong>Sorun:</strong> {{ improvement.issue }}</p>
+              <p class="improvement-suggestion"><strong>Öneri:</strong> {{ improvement.suggestion }}</p>
+            </div>
+          }
+        </div>
+      }
+    </div>
+  }
+</p-dialog>
+
+<!-- Approve Modal -->
+<p-dialog 
+  header="İyileştirmeyi Onayla" 
+  [(visible)]="showApproveModal" 
+  [modal]="true" 
+  [style]="{width: '500px'}"
+  [draggable]="false">
+  @if (selectedImprovement()) {
+    <div class="approve-content">
+      <div class="improvement-preview">
+        <p><strong>Kategori:</strong> {{ selectedImprovement()!.category }}</p>
+        <p><strong>Sorun:</strong> {{ selectedImprovement()!.issue }}</p>
+        <p><strong>Öneri:</strong> {{ selectedImprovement()!.suggestion }}</p>
+      </div>
+
+      <div class="review-notes">
+        <label for="reviewNotes">İnceleme Notları (İsteğe bağlı)</label>
+        <textarea 
+          pTextarea 
+          id="reviewNotes"
+          [(ngModel)]="reviewNotes"
+          rows="3"
+          placeholder="Bu iyileştirme hakkında notlarınız...">
+        </textarea>
+      </div>
+    </div>
+
+    <ng-template pTemplate="footer">
+      <p-button 
+        label="İptal" 
+        icon="pi pi-times" 
+        [text]="true"
+        (click)="showApproveModal.set(false)">
+      </p-button>
+      <p-button 
+        label="Onayla" 
+        icon="pi pi-check" 
+        severity="success"
+        (click)="approveImprovement()">
+      </p-button>
+    </ng-template>
+  }
+</p-dialog>

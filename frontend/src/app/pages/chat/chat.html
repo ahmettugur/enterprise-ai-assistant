@@ -1,0 +1,571 @@
+<div class="app-container">
+  <!-- History Sidebar -->
+  <app-sidebar [isOpen]="isSidebarOpen()" [conversations]="conversations()" (toggle)="toggleSidebar()"
+    (newChat)="clearChat()" (selectConversation)="loadConversation($event)"
+    (deleteConversation)="deleteConversation($event)"></app-sidebar>
+
+  <!-- Main Content -->
+  <main class="main-content">
+    <!-- Header -->
+    <app-header [user]="currentUser()" [isConnected]="isConnected()" [connectionId]="connectionId()"
+      (menuClick)="toggleSidebar()" (logout)="logout()"></app-header>
+
+    <!-- Chat Area -->
+    <div class="chat-area">
+      <!-- Messages Container -->
+      <div class="messages-container" id="report-box" #messagesContainer>
+        @for (message of messages(); track message.id) {
+        <!-- User Message -->
+        @if (message.type === 'user') {
+        <div class="modern-report-card mb-3">
+          <div class="message-with-avatar user-message-row">
+            <div class="modern-report-content">
+              <div class="flex items-center gap-1">
+                <div class="flex-1 ml-3">
+                  <p class="text-muted mb-0 text-sm">{{ message.content }}</p>
+                </div>
+              </div>
+            </div>
+            <img src="assets/images/user.png" alt="User" class="chat-avatar user-chat-avatar">
+          </div>
+        </div>
+        }
+
+        <!-- AI Message -->
+        @if (message.type === 'ai') {
+        <div class="streaming-chat-container" [class.welcome-streaming-container]="message.id === 'welcome'">
+          <div class="message-with-avatar ai-message-row">
+            <img src="assets/images/chatbot.png" alt="AI Assistant" class="chat-avatar bot-chat-avatar">
+            <div class="streaming-chat-content">
+              <div class="streaming-message" [innerHTML]="message.content | safeHtml"></div>
+
+            <!-- Feedback Buttons (only for non-welcome messages and AI responses with showFeedback=true) -->
+            @if (message.id !== 'welcome' && message.showFeedback !== false) {
+            <div class="feedback-buttons">
+              <button class="feedback-btn feedback-btn-positive" [class.active]="hasPositiveFeedback(message.id)"
+                [class.disabled]="isFeedbackSubmitting(message.id)" [disabled]="isFeedbackSubmitting(message.id)"
+                (click)="onFeedbackClick(message.id, 'positive')" title="Bu yanıt faydalıydı">
+                <i class="fas fa-thumbs-up"></i>
+              </button>
+              <button class="feedback-btn feedback-btn-negative" [class.active]="hasNegativeFeedback(message.id)"
+                [class.disabled]="isFeedbackSubmitting(message.id)" [disabled]="isFeedbackSubmitting(message.id)"
+                (click)="onFeedbackClick(message.id, 'negative')" title="Bu yanıt faydalı değildi">
+                <i class="fas fa-thumbs-down"></i>
+              </button>
+            </div>
+            }
+
+            <!-- Welcome Options -->
+            @if (message.id === 'welcome') {
+            <div class="welcome-options">
+              @for (option of chatOptions; track option.type) {
+              <div class="option-button" (click)="selectOption(option)">
+                <i [class]="option.icon"></i>
+                <span>
+                  <strong>{{ option.title }}</strong>
+                  <small>{{ option.description }}</small>
+                </span>
+              </div>
+              }
+            </div>
+            }
+
+            <!-- Suggestions - report.js createSuggestionsElement ile aynı -->
+            @if (message.suggestions && message.suggestions.length > 0) {
+            <div class="suggestions-container">
+              <div class="suggestions-title">
+                <i class="fas fa-lightbulb"></i> Öneriler
+              </div>
+              <div class="suggestions-buttons">
+                @for (suggestion of message.suggestions; track suggestion) {
+                <!-- Event delegation ile handle ediliyor (chat.ts satır 263-278) -->
+                <button class="suggestion-button" [attr.data-suggestion]="suggestion" [title]="suggestion">
+                  <i class="fas fa-arrow-right"></i> {{ suggestion }}
+                </button>
+                }
+              </div>
+            </div>
+            }
+            </div>
+          </div>
+        </div>
+        }
+
+        <!-- Loading Message -->
+        @if (message.type === 'loading') {
+        <div id="typing-indicator" class="modern-typing-indicator mb-2">
+          <div class="message-with-avatar ai-message-row">
+            <img src="assets/images/chatbot.png" alt="AI Assistant" class="chat-avatar bot-chat-avatar">
+            <div class="modern-typing-content">
+              <div class="flex items-center gap-1">
+                <div class="modern-typing-dots-container">
+                  <div class="modern-typing-dots">
+                    <div class="modern-dot"></div>
+                    <div class="modern-dot"></div>
+                    <div class="modern-dot"></div>
+                  </div>
+                </div>
+                <div class="modern-typing-description ml-3" id="typing-message">
+                  <p>{{ message.content || loadingText() || 'Yapay zeka yanıt hazırlıyor...' }}</p>
+                </div>
+              </div>
+              <!-- Analysis Progress Container -->
+              <div id="analysis-progress" class="hidden mt-3"></div>
+            </div>
+          </div>
+        </div>
+        }
+
+        <!-- Error Message -->
+        @if (message.type === 'error') {
+        <div class="message error-message">
+          <div class="message-content">
+            <i class="fas fa-exclamation-circle"></i>
+            <span>{{ message.content }}</span>
+          </div>
+        </div>
+        }
+        }
+      </div>
+
+      <!-- ReAct Panel - AI Düşünme Süreci (Bağımsız) -->
+      @if (reactSteps().length > 0) {
+      <div class="react-panel-standalone">
+        <button class="react-toggle" (click)="toggleReActPanel()">
+          <i class="fas fa-brain mr-2"></i>
+          AI Düşünme Süreci ({{ reactSteps().length }})
+          <i class="fas" [class.fa-chevron-down]="!showReActPanel()" [class.fa-chevron-up]="showReActPanel()"></i>
+        </button>
+        @if (showReActPanel()) {
+        <div class="react-steps">
+          @for (step of reactSteps(); track step.stepNumber) {
+          <div class="react-step" [class.thought]="step.stepType === 'thought'"
+            [class.action]="step.stepType === 'action'" [class.observation]="step.stepType === 'observation'">
+            <span class="react-icon">{{ step.stepType === 'thought' ? '💭' : step.stepType === 'observation' ? '👁️' :
+              '⚡' }}</span>
+            <span class="react-content">{{ step.content }}</span>
+          </div>
+          }
+        </div>
+        }
+      </div>
+      }
+    </div>
+
+    <!-- Input Area -->
+    <div class="input-area">
+      <div class="input-wrapper" id="input-report">
+        <!-- Active Filter Tags Display - autocomplete-manager.js updateFilterDisplay gibi -->
+        @if (autocompleteService.hasActiveFilters()) {
+        <div class="filters-display" id="selectedFiltersDisplay">
+          <div class="filters-header">
+            <i class="fas fa-filter"></i>
+            <span>Aktif Filtreler</span>
+          </div>
+          <div class="filter-tags" id="filterTags">
+            @for (filter of autocompleteService.allFilters(); track $index) {
+            <span class="filter-tag" [attr.data-color]="filter.color">
+              <i class="fas" [class]="filter.icon"></i>
+              <span class="filter-label">{{ filter.label }}:</span>
+              <span class="filter-value">{{ filter.value }}</span>
+              <button class="filter-remove-btn" (click)="removeFilterTag(filter)" title="Kaldır">
+                <i class="fas fa-times"></i>
+              </button>
+            </span>
+            }
+          </div>
+          <button class="clear-filters-btn" (click)="clearAllFilterTags()" title="Tümünü Temizle">
+            <i class="fas fa-times-circle"></i>
+          </button>
+        </div>
+        }
+
+        <!-- Selected File Display (report.js displaySelectedFile ile aynı) -->
+        @if (selectedFile()) {
+        <div class="file-display" id="selectedFileDisplay">
+          <div class="file-info">
+            <i class="fas fa-file-alt"></i>
+            <span id="selectedFileName">📎 {{ selectedFile()!.name }} ({{ (selectedFile()!.size / 1024 /
+              1024).toFixed(2) }}MB)</span>
+          </div>
+          <button class="remove-file-btn" (click)="clearSelectedFile()" title="Dosyayı Kaldır">
+            <i class="fas fa-times"></i>
+          </button>
+        </div>
+        }
+
+        <!-- Input Row -->
+        <div class="input-row">
+          <input type="file" id="fileInput" #fileInputRef hidden
+            accept=".xlsx,.xls,.csv,.pdf,.docx,.doc,.txt,.pptx,.ppt" (change)="onFileSelected($event)">
+
+          <!-- Attach Button -->
+          <button class="input-action-btn attach-btn" (click)="triggerFileInput()" title="Dosya Ekle">
+            <i class="fas fa-paperclip"></i>
+          </button>
+
+          <!-- Text Input -->
+          <div class="text-input-container">
+            <textarea #messageInput id="report-input" [(ngModel)]="inputMessage" (input)="onInputChange($event)"
+              (keydown)="onKeydown($event)" placeholder="Mesajınızı yazın... (# ile filtreleme yapabilirsiniz)"
+              autocomplete="off" rows="1"></textarea>
+
+            <!-- Filter Category Menu - autocomplete-manager.js _createCategoryMenu gibi -->
+            @if (autocompleteService.isMenuOpen()) {
+            <div class="autocomplete-menu" id="autocomplete-menu" [style.position]="'fixed'"
+              [style.left.px]="autocompleteService.menuPosition().left"
+              [style.bottom.px]="autocompleteService.menuPosition().bottom">
+              <div class="autocomplete-menu-header">
+                <span class="autocomplete-menu-title">
+                  <i class="fas fa-hashtag"></i> Kategori Seçin
+                </span>
+                <button type="button" class="autocomplete-menu-close" (click)="autocompleteService.closeMenu()">
+                  <i class="fas fa-times"></i>
+                </button>
+              </div>
+              <div class="autocomplete-menu-items">
+                @for (category of autocompleteService.filterCategories; track category.id; let i = $index) {
+                <div class="autocomplete-menu-item" [class.active]="autocompleteService.activeMenuIndex() === i"
+                  [attr.data-category]="category.id" (click)="onFilterCategoryClick(category.id)">
+                  <i class="fas" [class]="category.icon"></i>
+                  <span>{{ category.label }}</span>
+                </div>
+                }
+              </div>
+            </div>
+            }
+          </div>
+
+          <!-- Send Button -->
+          <button class="input-action-btn send-btn" (click)="sendMessage()" [disabled]="isLoading()" title="Gönder">
+            @if (isLoading()) {
+            <i class="fas fa-spinner fa-spin"></i>
+            } @else {
+            <i class="fas fa-paper-plane"></i>
+            }
+          </button>
+        </div>
+
+        <!-- Input Hint -->
+        <div class="input-hint">
+          <span><kbd>#</kbd> ile filtre ekleyin</span>
+          <span><kbd>Shift+Enter</kbd> yeni satır</span>
+          <span><kbd>Enter</kbd> ile gönderin</span>
+        </div>
+      </div>
+    </div>
+  </main>
+</div>
+
+<!-- Filter Selection Modal - autocomplete-manager.js _createSelect2Modal gibi -->
+@if (autocompleteService.isModalOpen()) {
+<div class="filter-modal-overlay" id="filter-modal"
+  (click)="$event.target === $event.currentTarget && closeFilterModal()">
+  <div class="filter-modal-content">
+    <div class="filter-modal-header">
+      <span class="filter-modal-title" id="modalTitle">
+        <i class="fas" [class]="autocompleteService.getCategoryIcon(autocompleteService.currentCategory()!)"></i>
+        {{ autocompleteService.getCategoryTitle(autocompleteService.currentCategory()!) }} Seçin
+      </span>
+      <button type="button" class="filter-modal-close" (click)="closeFilterModal()">
+        <i class="fas fa-times"></i>
+      </button>
+    </div>
+    <div class="filter-modal-body">
+      <!-- Select2 Container -->
+      <select id="autocomplete-select2" style="width: 100%;"></select>
+    </div>
+  </div>
+</div>
+}
+
+<!-- Date Filter Modal -->
+@if (autocompleteService.dateFilterService.isModalOpen()) {
+<div class="date-modal-overlay"
+  (click)="$event.target === $event.currentTarget && autocompleteService.dateFilterService.closeModal()">
+  <div class="date-modal-content">
+    <div class="date-modal-header">
+      <span class="date-modal-title">
+        <i class="fas fa-calendar-alt"></i> Tarih Seçin
+      </span>
+      <button type="button" class="date-modal-close" (click)="autocompleteService.dateFilterService.closeModal()">
+        <i class="fas fa-times"></i>
+      </button>
+    </div>
+
+    <div class="date-modal-body">
+      <!-- Mode Tabs -->
+      <div class="date-mode-tabs">
+        <button class="date-mode-tab" [class.active]="autocompleteService.dateFilterService.activeMode() === 'preset'"
+          (click)="autocompleteService.dateFilterService.setMode('preset')">
+          <i class="fas fa-bolt"></i> Hızlı Seçim
+        </button>
+        <button class="date-mode-tab" [class.active]="autocompleteService.dateFilterService.activeMode() === 'single'"
+          (click)="autocompleteService.dateFilterService.setMode('single')">
+          <i class="fas fa-calendar-day"></i> Tek Tarih
+        </button>
+        <button class="date-mode-tab" [class.active]="autocompleteService.dateFilterService.activeMode() === 'range'"
+          (click)="autocompleteService.dateFilterService.setMode('range')">
+          <i class="fas fa-calendar-week"></i> Tarih Aralığı
+        </button>
+        <button class="date-mode-tab" [class.active]="autocompleteService.dateFilterService.activeMode() === 'month'"
+          (click)="autocompleteService.dateFilterService.setMode('month')">
+          <i class="fas fa-calendar-alt"></i> Ay Seçimi
+        </button>
+      </div>
+
+      <!-- Preset Mode -->
+      @if (autocompleteService.dateFilterService.activeMode() === 'preset') {
+      <div class="date-presets">
+        @for (preset of autocompleteService.dateFilterService.presets; track preset.id) {
+        <button class="date-preset-btn"
+          [class.active]="autocompleteService.dateFilterService.selectedDate()?.presetId === preset.id"
+          (click)="selectDatePreset(preset.id)">
+          <i class="fas" [class]="preset.icon"></i>
+          <span>{{ preset.label }}</span>
+        </button>
+        }
+      </div>
+      }
+
+      <!-- Single Date Mode -->
+      @if (autocompleteService.dateFilterService.activeMode() === 'single') {
+      <div class="date-single-picker">
+        <label class="date-label">
+          <i class="fas fa-calendar-day"></i> Tarih
+        </label>
+        <input type="date" class="date-input" [value]="autocompleteService.dateFilterService.tempSingleDate()"
+          (change)="onSingleDateChange($event)">
+        <button class="date-confirm-btn" (click)="confirmSingleDate()">
+          <i class="fas fa-check"></i> Uygula
+        </button>
+      </div>
+      }
+
+      <!-- Range Mode -->
+      @if (autocompleteService.dateFilterService.activeMode() === 'range') {
+      <div class="date-range-picker">
+        <div class="date-range-row">
+          <div class="date-range-field">
+            <label class="date-label">
+              <i class="fas fa-calendar-plus"></i> Başlangıç
+            </label>
+            <input type="date" class="date-input" [value]="autocompleteService.dateFilterService.tempStartDate()"
+              (change)="onStartDateChange($event)">
+          </div>
+          <div class="date-range-separator">
+            <i class="fas fa-arrow-right"></i>
+          </div>
+          <div class="date-range-field">
+            <label class="date-label">
+              <i class="fas fa-calendar-minus"></i> Bitiş
+            </label>
+            <input type="date" class="date-input" [value]="autocompleteService.dateFilterService.tempEndDate()"
+              (change)="onEndDateChange($event)">
+          </div>
+        </div>
+        <button class="date-confirm-btn" (click)="confirmDateRange()">
+          <i class="fas fa-check"></i> Uygula
+        </button>
+      </div>
+      }
+
+      <!-- Month Mode -->
+      @if (autocompleteService.dateFilterService.activeMode() === 'month') {
+      <div class="date-month-picker">
+        <div class="date-month-row">
+          <div class="date-month-field">
+            <label class="date-label">
+              <i class="fas fa-calendar"></i> Yıl
+            </label>
+            <select class="date-select" [value]="autocompleteService.dateFilterService.tempYear()"
+              (change)="onYearChange($event)">
+              @for (year of autocompleteService.dateFilterService.yearOptions(); track year) {
+              <option [value]="year">{{ year }}</option>
+              }
+            </select>
+          </div>
+          <div class="date-month-field">
+            <label class="date-label">
+              <i class="fas fa-calendar-alt"></i> Ay
+            </label>
+            <select class="date-select" [value]="autocompleteService.dateFilterService.tempMonth()"
+              (change)="onMonthChange($event)">
+              @for (month of autocompleteService.dateFilterService.monthNames; track $index) {
+              <option [value]="$index">{{ month }}</option>
+              }
+            </select>
+          </div>
+        </div>
+        <button class="date-confirm-btn" (click)="confirmMonth()">
+          <i class="fas fa-check"></i> Uygula
+        </button>
+      </div>
+      }
+
+      <!-- Current Selection Preview -->
+      @if (autocompleteService.dateFilterService.hasSelection()) {
+      <div class="date-selection-preview">
+        <span class="date-preview-label">Seçili:</span>
+        <span class="date-preview-value">{{ autocompleteService.dateFilterService.displayText() }}</span>
+        <button class="date-clear-btn" (click)="autocompleteService.dateFilterService.clearSelection()">
+          <i class="fas fa-times"></i>
+        </button>
+      </div>
+      }
+    </div>
+  </div>
+</div>
+}
+
+<!-- Minimized Reports - Folder style when multiple -->
+@if (minimizedReports().length > 0) {
+<!-- Single report: Show normal minimize card -->
+@if (minimizedReports().length === 1) {
+<div class="minimized-reports-stack">
+  <div class="report-iframe-minimized" (click)="restoreMinimizedReport(minimizedReports()[0])">
+    <div class="report-mini-header">
+      <div class="report-mini-info">
+        @if (minimizedReports()[0].loading) {
+        <i class="fas fa-spinner fa-spin"></i>
+        } @else {
+        <i class="fas fa-chart-bar"></i>
+        }
+        <span class="report-mini-title">{{ minimizedReports()[0].title }}</span>
+      </div>
+      <div class="report-mini-actions">
+        <button class="report-mini-btn maximize"
+          (click)="restoreMinimizedReport(minimizedReports()[0]); $event.stopPropagation()" title="Büyüt">
+          <i class="fas fa-expand-alt"></i>
+        </button>
+        <button class="report-mini-btn close" (click)="closeMinimizedReport(minimizedReports()[0], $event)"
+          title="Kapat">
+          <i class="fas fa-times"></i>
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+} @else {
+<!-- Multiple reports: Show folder style -->
+<div class="minimized-reports-folder" (click)="toggleMoreReportsDropdown()">
+  <div class="folder-icons">
+    @for (report of minimizedReports().slice(0, 3); track report.id; let i = $index) {
+    <div class="folder-icon" [style.transform]="'translateX(' + (i * -8) + 'px) rotate(' + (i * 3 - 3) + 'deg)'">
+      <i class="fas fa-chart-bar"></i>
+    </div>
+    }
+  </div>
+  <div class="folder-info">
+    <span class="folder-count">{{ minimizedReports().length }}</span>
+    <span class="folder-label">Açık Rapor</span>
+  </div>
+  <div class="folder-expand">
+    <i class="fas fa-chevron-down" [class.rotated]="showMoreReportsDropdown()"></i>
+  </div>
+
+  <!-- Dropdown list when folder is clicked -->
+  @if (showMoreReportsDropdown()) {
+  <div class="folder-dropdown" (click)="$event.stopPropagation()">
+    @for (report of minimizedReports(); track report.id) {
+    <div class="dropdown-report-item" (click)="restoreMinimizedReport(report)">
+      <div class="dropdown-report-info">
+        <i class="fas fa-chart-bar"></i>
+        <span>{{ report.title }}</span>
+      </div>
+      <div class="dropdown-report-actions">
+        <button class="dropdown-report-btn" (click)="restoreMinimizedReport(report); $event.stopPropagation()"
+          title="Büyüt">
+          <i class="fas fa-expand-alt"></i>
+        </button>
+        <button class="dropdown-report-btn close" (click)="closeMinimizedReport(report, $event)" title="Kapat">
+          <i class="fas fa-times"></i>
+        </button>
+      </div>
+    </div>
+    }
+    <div class="folder-dropdown-footer">
+      <button class="close-all-btn" (click)="closeAllMinimizedReports($event)">
+        <i class="fas fa-times-circle"></i>
+        Tümünü Kapat
+      </button>
+    </div>
+  </div>
+  }
+</div>
+}
+}
+
+<!-- All Report Iframes - Keep all in DOM to preserve state -->
+@if (openReports().length > 0) {
+@for (report of openReports(); track report.id) {
+<!-- Only show overlay for active report -->
+<div class="report-iframe-overlay" [class.hidden]="activeReportId() !== report.id" (click)="closeReportIframe()">
+  <div class="report-iframe-container" (click)="$event.stopPropagation()">
+    <div class="report-iframe-header">
+      <div class="report-iframe-title">
+        <i class="fas fa-chart-bar"></i>
+        <span>{{ report.title }}</span>
+      </div>
+      <div class="report-iframe-actions">
+        <button class="report-iframe-btn" (click)="toggleReportIframeMinimize()" title="Küçült">
+          <i class="fas fa-compress-alt"></i>
+        </button>
+        <button class="report-iframe-btn" (click)="openReportInNewTab()" title="Yeni sekmede aç">
+          <i class="fas fa-external-link-alt"></i>
+        </button>
+        <button class="report-iframe-btn close" (click)="closeReportIframe()" title="Kapat">
+          <i class="fas fa-times"></i>
+        </button>
+      </div>
+    </div>
+    <div class="report-iframe-body">
+      @if (report.loading) {
+      <div class="report-iframe-loading">
+        <i class="fas fa-spinner fa-spin"></i>
+        <span>Rapor yükleniyor...</span>
+      </div>
+      }
+      <iframe [src]="report.safeUrl" frameborder="0" allowfullscreen (load)="onReportIframeLoad(report.id)"
+        [class.loading]="report.loading">
+      </iframe>
+    </div>
+  </div>
+</div>
+}
+}
+
+<!-- Negative Feedback Comment Modal -->
+@if (showFeedbackCommentModal) {
+<div class="feedback-modal-overlay" (click)="closeFeedbackCommentModal()">
+  <div class="feedback-modal-container" (click)="$event.stopPropagation()">
+    <div class="feedback-modal-header">
+      <div class="feedback-modal-icon">
+        <i class="fas fa-comment-dots"></i>
+      </div>
+      <h3>Geri Bildiriminiz</h3>
+      <button class="feedback-modal-close" (click)="closeFeedbackCommentModal()">
+        <i class="fas fa-times"></i>
+      </button>
+    </div>
+    <div class="feedback-modal-body">
+      <p class="feedback-modal-description">
+        Bu yanıtı neden beğenmediniz? Geri bildiriminiz yapay zekamızı geliştirmemize yardımcı olacaktır.
+      </p>
+      <textarea class="feedback-comment-input" [(ngModel)]="feedbackComment"
+        placeholder="Yanıtın nesi yanlıştı veya eksikti? (Opsiyonel)" rows="4" maxlength="500"></textarea>
+      <div class="feedback-char-count">
+        {{ feedbackComment.length }}/500
+      </div>
+    </div>
+    <div class="feedback-modal-footer">
+      <button class="feedback-btn-secondary" (click)="skipCommentAndSubmit()">
+        <i class="fas fa-forward"></i> Atla
+      </button>
+      <button class="feedback-btn-primary" (click)="submitNegativeFeedbackWithComment()">
+        <i class="fas fa-paper-plane"></i> Gönder
+      </button>
+    </div>
+  </div>
+</div>
+}

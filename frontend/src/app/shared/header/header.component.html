@@ -1,0 +1,103 @@
+<header class="main-header">
+  <div class="header-left">
+    <button class="mobile-menu-btn" (click)="onMenuClick()" title="Geçmişi Göster">
+      <i class="fas fa-bars"></i>
+    </button>
+    <div class="header-brand">
+      <div class="brand-icon">
+        <img src="assets/images/chatbot.png" alt="AI Asistan" class="brand-icon-img">
+      </div>
+      <div class="header-title">
+        <h1>AI Asistan</h1>
+        <span class="header-subtitle">Akıllı Yardımcınız</span>
+      </div>
+    </div>
+  </div>
+  
+  <div class="header-right">
+    <div class="connection-info" [class]="getConnectionStatusClass()">
+      <span class="connection-dot"></span>
+      <span class="connection-text">{{ getConnectionStatusText() }}</span>
+    </div>
+    
+    <!-- User Menu - CSS :focus-within dropdown -->
+    <div class="user-menu-wrapper">
+      <button type="button" class="user-avatar-btn" [class.authenticated]="user">
+        @if (user) {
+          <span class="avatar-initials">{{ getUserInitials() }}</span>
+        } @else {
+          <i class="fas fa-user"></i>
+        }
+      </button>
+      
+      <div class="user-dropdown-menu">
+        @if (user) {
+          <div class="dropdown-user-info">
+            <div class="dropdown-user-avatar">
+              <i class="fas fa-user-circle"></i>
+            </div>
+            <div class="dropdown-user-details">
+              <span class="dropdown-user-name">{{ user.displayName || 'Kullanıcı' }}</span>
+              <span class="dropdown-user-email">{{ user.email }}</span>
+            </div>
+          </div>
+          <div class="dropdown-divider"></div>
+        } @else {
+          <a routerLink="/login" class="dropdown-item login-btn">
+            <i class="fas fa-sign-in-alt"></i>
+            <span>Giriş Yap</span>
+          </a>
+          <div class="dropdown-divider"></div>
+        }
+        
+        <div class="dropdown-header">
+          <i class="fas fa-cog"></i>
+          <span>Döküman Yönetimi</span>
+        </div>
+        <div class="dropdown-divider"></div>
+        
+        <button type="button" class="dropdown-item" (click)="openCategoryModal()">
+          <i class="fas fa-folder-plus"></i>
+          <span>Kategori Ekle</span>
+        </button>
+        <button type="button" class="dropdown-item" (click)="openUploadModal()">
+          <i class="fas fa-file-upload"></i>
+          <span>Döküman Yükle</span>
+        </button>
+        <div class="dropdown-divider"></div>
+        <button type="button" class="dropdown-item" (click)="openDocumentListModal()">
+          <i class="fas fa-list"></i>
+          <span>Dökümanlarım</span>
+        </button>
+        <div class="dropdown-divider"></div>
+        <a routerLink="/dashboard" class="dropdown-item">
+          <i class="fas fa-chart-line"></i>
+          <span>Dashboard</span>
+        </a>
+        
+        @if (user) {
+          <div class="dropdown-divider"></div>
+          <button type="button" class="dropdown-item logout-btn" (click)="onLogout()">
+            <i class="fas fa-sign-out-alt"></i>
+            <span>Çıkış Yap</span>
+          </button>
+        }
+      </div>
+    </div>
+  </div>
+</header>
+
+<!-- Modals -->
+<app-category-modal 
+  #categoryModal
+  (created)="onCategoryCreated()"
+></app-category-modal>
+
+<app-upload-modal 
+  #uploadModal
+></app-upload-modal>
+
+<app-document-list-modal 
+  #documentListModal
+  (openUploadModal)="onOpenUploadFromList()"
+></app-document-list-modal>

@@ -1,0 +1,139 @@
+<aside class="history-sidebar" [class.collapsed]="!isOpen" id="sidebar">
+  <div class="history-sidebar-header">
+    <div class="history-sidebar-title">
+      <i class="fas fa-history"></i>
+      <span>Sohbet Geçmişi</span>
+    </div>
+    <button class="sidebar-toggle" id="historyToggleBtn" (click)="onToggle()" [title]="isOpen ? 'Paneli Kapat' : 'Paneli Aç'">
+      <i class="fas" [class.fa-chevron-left]="isOpen" [class.fa-chevron-right]="!isOpen"></i>
+    </button>
+  </div>
+
+  <div class="history-sidebar-actions">
+    <button class="new-chat-btn" (click)="onNewChat()">
+      <i class="fas fa-plus"></i>
+      <span>Yeni Sohbet</span>
+    </button>
+  </div>
+
+  <div class="history-sidebar-search">
+    <i class="fas fa-search"></i>
+    <input 
+      type="text" 
+      id="history-search-input"
+      placeholder="Geçmişte ara..." 
+      [ngModel]="searchQuery()"
+      (ngModelChange)="searchQuery.set($event)"
+    >
+  </div>
+
+  <div class="history-sidebar-list" id="conversations-list">
+    @if (filteredConversations.length === 0) {
+      <div class="empty-state">
+        <i class="fas fa-comments empty-icon"></i>
+        <p class="empty-title">Henüz sohbet geçmişi yok</p>
+        <p class="empty-description">Yeni bir sohbet başlatın</p>
+      </div>
+    } @else {
+      @for (conversation of filteredConversations; track conversation.id) {
+        <div 
+          class="history-chat-container" 
+          [class.removing]="removingConversationId() === conversation.id"
+          (click)="onSelectConversation(conversation)">
+          <div class="history-chat-content">
+            <div class="history-chat-title">{{ conversation.title }}</div>
+            <div class="history-chat-preview">{{ conversation.lastMessage }}</div>
+          </div>
+          <span class="history-chat-time">{{ formatDate(conversation.timestamp) }}</span>
+          <button class="history-edit-btn" (click)="openEditTitleModal($event, conversation)" title="Başlığı Düzenle">
+            <i class="fas fa-pencil"></i>
+          </button>
+          <button class="history-delete-btn" (click)="onDeleteConversation($event, conversation.id)" title="Sil">
+            <i class="fas fa-trash"></i>
+          </button>
+        </div>
+      }
+    }
+  </div>
+</aside>
+
+<!-- Edit Title Modal -->
+@if (isEditModalOpen()) {
+  <div class="edit-title-modal-overlay" (click)="closeEditTitleModal()">
+    <div class="edit-title-modal" (click)="$event.stopPropagation()">
+      <div class="modal-header">
+        <h3>Sohbet Başlığını Düzenle</h3>
+        <button class="modal-close" (click)="closeEditTitleModal()" aria-label="Kapat">
+          <i class="fas fa-times"></i>
+        </button>
+      </div>
+      <div class="modal-body">
+        <input 
+          type="text" 
+          class="edit-title-input"
+          [ngModel]="editTitle()"
+          (ngModelChange)="editTitle.set($event)"
+          (keydown)="onTitleKeydown($event)"
+          placeholder="Yeni başlığı girin..."
+          maxlength="200"
+          autofocus
+        >
+        <small class="char-count">
+          <span>{{ editTitle().length }}</span>/200
+        </small>
+        @if (editTitleError()) {
+          <div class="edit-title-error">
+            <i class="fas fa-exclamation-circle"></i>
+            {{ editTitleError() }}
+          </div>
+        }
+      </div>
+      <div class="modal-footer">
+        <button class="btn-cancel" (click)="closeEditTitleModal()" [disabled]="isUpdatingTitle()">
+          İptal
+        </button>
+        <button class="btn-save" (click)="saveTitle()" [disabled]="isUpdatingTitle() || !editTitle().trim()">
+          @if (isUpdatingTitle()) {
+            <i class="fas fa-spinner fa-spin"></i>
+            Kaydediliyor...
+          } @else {
+            <i class="fas fa-check"></i>
+            Kaydet
+          }
+        </button>
+      </div>
+    </div>
+  </div>
+}
+
+<!-- Delete Confirmation Modal -->
+@if (isDeleteModalOpen()) {
+  <div class="delete-confirm-overlay" (click)="closeDeleteConfirmModal()">
+    <div class="delete-confirm-modal" (click)="$event.stopPropagation()">
+      <div class="confirm-icon">
+        <i class="fas fa-exclamation-triangle"></i>
+      </div>
+      <h4>Sohbeti Sil</h4>
+      <p>
+        <strong>"{{ deletingConversationTitle() }}"</strong> sohbetini silmek istediğinizden emin misiniz?
+      </p>
+      <p class="confirm-warning">
+        Bu işlem geri alınamaz!
+      </p>
+      <div class="confirm-actions">
+        <button class="btn-cancel" (click)="closeDeleteConfirmModal()" [disabled]="isDeleting()">
+          İptal
+        </button>
+        <button class="btn-danger" (click)="confirmDelete()" [disabled]="isDeleting()">
+          @if (isDeleting()) {
+            <i class="fas fa-spinner fa-spin"></i>
+            Siliniyor...
+          } @else {
+            <i class="fas fa-trash"></i>
+            Sil
+          }
+        </button>
+      </div>
+    </div>
+  </div>
+}

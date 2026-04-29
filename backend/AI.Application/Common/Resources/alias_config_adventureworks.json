@@ -1,0 +1,439 @@
+{
+  "sourceName": "AdventureWorks",
+  "tables": {
+    "Sales.Customer": {
+      "alias": "Müşteriler",
+      "description": "Müşteri bilgilerini içeren ana tablo"
+    },
+    "Sales.SalesOrderHeader": {
+      "alias": "Siparişler",
+      "description": "Satış siparişlerinin başlık bilgilerini içerir"
+    },
+    "Sales.SalesOrderDetail": {
+      "alias": "Sipariş Detayları",
+      "description": "Satış siparişlerinin satır detaylarını içerir"
+    },
+    "Sales.SalesPerson": {
+      "alias": "Satış Temsilcileri",
+      "description": "Satış personeli bilgilerini içerir"
+    },
+    "Sales.SalesTerritory": {
+      "alias": "Satış Bölgeleri",
+      "description": "Satış bölgelerini ve hedeflerini içerir"
+    },
+    "Sales.Store": {
+      "alias": "Mağazalar",
+      "description": "Bayi/mağaza bilgilerini içerir"
+    },
+    "Sales.Currency": {
+      "alias": "Para Birimleri",
+      "description": "Para birimi tanımları"
+    },
+    "Sales.CurrencyRate": {
+      "alias": "Döviz Kurları",
+      "description": "Para birimi dönüşüm oranları"
+    },
+    "Production.Product": {
+      "alias": "Ürünler",
+      "description": "Ürün ana verileri"
+    },
+    "Production.ProductCategory": {
+      "alias": "Ürün Kategorileri",
+      "description": "Ürün kategorileri"
+    },
+    "Production.ProductSubcategory": {
+      "alias": "Ürün Alt Kategorileri",
+      "description": "Ürün alt kategorileri"
+    },
+    "Production.ProductModel": {
+      "alias": "Ürün Modelleri",
+      "description": "Ürün model tanımları"
+    },
+    "Production.ProductInventory": {
+      "alias": "Ürün Stokları",
+      "description": "Lokasyon bazlı stok bilgileri"
+    },
+    "Production.WorkOrder": {
+      "alias": "Üretim Emirleri",
+      "description": "Üretim iş emirleri"
+    },
+    "Production.Location": {
+      "alias": "Lokasyonlar",
+      "description": "Üretim lokasyonları"
+    },
+    "Person.Person": {
+      "alias": "Kişiler",
+      "description": "Kişi bilgileri (çalışanlar, müşteriler)"
+    },
+    "Person.Address": {
+      "alias": "Adresler",
+      "description": "Adres bilgileri"
+    },
+    "Person.StateProvince": {
+      "alias": "Eyalet/İller",
+      "description": "Eyalet ve il bilgileri"
+    },
+    "Person.CountryRegion": {
+      "alias": "Ülkeler",
+      "description": "Ülke bilgileri"
+    },
+    "HumanResources.Employee": {
+      "alias": "Çalışanlar",
+      "description": "Çalışan bilgileri"
+    },
+    "HumanResources.Department": {
+      "alias": "Departmanlar",
+      "description": "Departman tanımları"
+    },
+    "HumanResources.Shift": {
+      "alias": "Vardiyalar",
+      "description": "Vardiya tanımları"
+    },
+    "Purchasing.Vendor": {
+      "alias": "Tedarikçiler",
+      "description": "Tedarikçi bilgileri"
+    },
+    "Purchasing.PurchaseOrderHeader": {
+      "alias": "Satın Alma Siparişleri",
+      "description": "Satın alma siparişi başlıkları"
+    },
+    "Purchasing.PurchaseOrderDetail": {
+      "alias": "Satın Alma Sipariş Detayları",
+      "description": "Satın alma sipariş detayları"
+    },
+    "Purchasing.ShipMethod": {
+      "alias": "Sevkiyat Yöntemleri",
+      "description": "Kargo/sevkiyat yöntemleri"
+    }
+  },
+  "columns": {
+    "Sales.Customer.CustomerID": {
+      "alias": "Müşteri No",
+      "description": "Müşteri benzersiz kimlik numarası"
+    },
+    "Sales.Customer.AccountNumber": {
+      "alias": "Hesap Numarası",
+      "description": "Müşteri hesap numarası"
+    },
+    "Sales.Customer.TerritoryID": {
+      "alias": "Bölge No",
+      "description": "Satış bölgesi kimliği"
+    },
+    "Sales.SalesOrderHeader.SalesOrderID": {
+      "alias": "Sipariş No",
+      "description": "Sipariş benzersiz kimliği"
+    },
+    "Sales.SalesOrderHeader.OrderDate": {
+      "alias": "Sipariş Tarihi",
+      "description": "Siparişin verildiği tarih"
+    },
+    "Sales.SalesOrderHeader.DueDate": {
+      "alias": "Vade Tarihi",
+      "description": "Siparişin teslim edilmesi gereken tarih"
+    },
+    "Sales.SalesOrderHeader.ShipDate": {
+      "alias": "Sevk Tarihi",
+      "description": "Siparişin sevk edildiği tarih"
+    },
+    "Sales.SalesOrderHeader.TotalDue": {
+      "alias": "Toplam Tutar",
+      "description": "Vergi ve nakliye dahil toplam sipariş tutarı"
+    },
+    "Sales.SalesOrderHeader.SubTotal": {
+      "alias": "Ara Toplam",
+      "description": "Vergi öncesi sipariş tutarı"
+    },
+    "Sales.SalesOrderHeader.TaxAmt": {
+      "alias": "Vergi Tutarı",
+      "description": "Sipariş vergi tutarı"
+    },
+    "Sales.SalesOrderHeader.Freight": {
+      "alias": "Nakliye Ücreti",
+      "description": "Kargo/nakliye ücreti"
+    },
+    "Sales.SalesOrderHeader.CustomerID": {
+      "alias": "Müşteri No",
+      "description": "Siparişi veren müşteri"
+    },
+    "Sales.SalesOrderHeader.SalesPersonID": {
+      "alias": "Satış Temsilcisi No",
+      "description": "Siparişi alan satış temsilcisi"
+    },
+    "Sales.SalesOrderDetail.OrderQty": {
+      "alias": "Sipariş Miktarı",
+      "description": "Sipariş edilen ürün adedi"
+    },
+    "Sales.SalesOrderDetail.UnitPrice": {
+      "alias": "Birim Fiyat",
+      "description": "Ürün birim fiyatı"
+    },
+    "Sales.SalesOrderDetail.LineTotal": {
+      "alias": "Satır Toplamı",
+      "description": "Satır toplam tutarı"
+    },
+    "Sales.SalesOrderDetail.ProductID": {
+      "alias": "Ürün No",
+      "description": "Sipariş edilen ürün"
+    },
+    "Sales.SalesTerritory.TerritoryID": {
+      "alias": "Bölge No",
+      "description": "Satış bölgesi kimliği"
+    },
+    "Sales.SalesTerritory.Name": {
+      "alias": "Bölge Adı",
+      "description": "Satış bölgesi adı"
+    },
+    "Sales.SalesTerritory.CountryRegionCode": {
+      "alias": "Ülke Kodu",
+      "description": "Ülke/bölge kodu"
+    },
+    "Sales.SalesTerritory.Group": {
+      "alias": "Bölge Grubu",
+      "description": "Coğrafi bölge grubu"
+    },
+    "Sales.SalesPerson.BusinessEntityID": {
+      "alias": "Satış Temsilcisi No",
+      "description": "Satış temsilcisi kimliği"
+    },
+    "Sales.SalesPerson.SalesQuota": {
+      "alias": "Satış Hedefi",
+      "description": "Satış kotası"
+    },
+    "Sales.SalesPerson.Bonus": {
+      "alias": "Bonus",
+      "description": "Satış bonusu"
+    },
+    "Sales.SalesPerson.CommissionPct": {
+      "alias": "Komisyon Yüzdesi",
+      "description": "Satış komisyon oranı"
+    },
+    "Sales.SalesPerson.SalesYTD": {
+      "alias": "YTD Satış",
+      "description": "Yıl başından bu yana toplam satış"
+    },
+    "Sales.SalesPerson.SalesLastYear": {
+      "alias": "Geçen Yıl Satış",
+      "description": "Geçen yılki toplam satış"
+    },
+    "Production.Product.ProductID": {
+      "alias": "Ürün No",
+      "description": "Ürün benzersiz kimliği"
+    },
+    "Production.Product.Name": {
+      "alias": "Ürün Adı",
+      "description": "Ürün adı"
+    },
+    "Production.Product.ProductNumber": {
+      "alias": "Ürün Kodu",
+      "description": "Ürün stok kodu"
+    },
+    "Production.Product.ListPrice": {
+      "alias": "Liste Fiyatı",
+      "description": "Ürün satış fiyatı"
+    },
+    "Production.Product.StandardCost": {
+      "alias": "Standart Maliyet",
+      "description": "Ürün maliyet fiyatı"
+    },
+    "Production.Product.Color": {
+      "alias": "Renk",
+      "description": "Ürün rengi"
+    },
+    "Production.Product.Size": {
+      "alias": "Beden",
+      "description": "Ürün bedeni"
+    },
+    "Production.Product.Weight": {
+      "alias": "Ağırlık",
+      "description": "Ürün ağırlığı"
+    },
+    "Production.Product.SafetyStockLevel": {
+      "alias": "Güvenlik Stok Seviyesi",
+      "description": "Minimum stok seviyesi"
+    },
+    "Production.Product.ReorderPoint": {
+      "alias": "Yeniden Sipariş Noktası",
+      "description": "Sipariş tetikleme noktası"
+    },
+    "Production.ProductCategory.ProductCategoryID": {
+      "alias": "Kategori No",
+      "description": "Kategori kimliği"
+    },
+    "Production.ProductCategory.Name": {
+      "alias": "Kategori Adı",
+      "description": "Kategori adı"
+    },
+    "Production.ProductSubcategory.ProductSubcategoryID": {
+      "alias": "Alt Kategori No",
+      "description": "Alt kategori kimliği"
+    },
+    "Production.ProductSubcategory.Name": {
+      "alias": "Alt Kategori Adı",
+      "description": "Alt kategori adı"
+    },
+    "Production.ProductInventory.Quantity": {
+      "alias": "Stok Miktarı",
+      "description": "Mevcut stok miktarı"
+    },
+    "Production.ProductInventory.LocationID": {
+      "alias": "Lokasyon No",
+      "description": "Stok lokasyonu"
+    },
+    "Production.WorkOrder.WorkOrderID": {
+      "alias": "İş Emri No",
+      "description": "Üretim iş emri numarası"
+    },
+    "Production.WorkOrder.OrderQty": {
+      "alias": "Sipariş Miktarı",
+      "description": "Üretilecek ürün adedi"
+    },
+    "Production.WorkOrder.ScrappedQty": {
+      "alias": "Hurda Miktarı",
+      "description": "Fire/hurda miktarı"
+    },
+    "Production.WorkOrder.StartDate": {
+      "alias": "Başlangıç Tarihi",
+      "description": "Üretim başlangıç tarihi"
+    },
+    "Production.WorkOrder.EndDate": {
+      "alias": "Bitiş Tarihi",
+      "description": "Üretim bitiş tarihi"
+    },
+    "Person.Person.BusinessEntityID": {
+      "alias": "Kişi No",
+      "description": "Kişi benzersiz kimliği"
+    },
+    "Person.Person.FirstName": {
+      "alias": "Ad",
+      "description": "Kişi adı"
+    },
+    "Person.Person.LastName": {
+      "alias": "Soyad",
+      "description": "Kişi soyadı"
+    },
+    "Person.Person.EmailPromotion": {
+      "alias": "E-posta Tercihi",
+      "description": "E-posta promosyon izni"
+    },
+    "Person.Address.AddressID": {
+      "alias": "Adres No",
+      "description": "Adres benzersiz kimliği"
+    },
+    "Person.Address.AddressLine1": {
+      "alias": "Adres Satırı 1",
+      "description": "Birinci adres satırı"
+    },
+    "Person.Address.City": {
+      "alias": "Şehir",
+      "description": "Şehir adı"
+    },
+    "Person.Address.PostalCode": {
+      "alias": "Posta Kodu",
+      "description": "Posta kodu"
+    },
+    "Person.StateProvince.StateProvinceID": {
+      "alias": "Eyalet/İl No",
+      "description": "Eyalet/il kimliği"
+    },
+    "Person.StateProvince.Name": {
+      "alias": "Eyalet/İl Adı",
+      "description": "Eyalet/il adı"
+    },
+    "Person.CountryRegion.CountryRegionCode": {
+      "alias": "Ülke Kodu",
+      "description": "Ülke ISO kodu"
+    },
+    "Person.CountryRegion.Name": {
+      "alias": "Ülke Adı",
+      "description": "Ülke adı"
+    },
+    "HumanResources.Employee.BusinessEntityID": {
+      "alias": "Çalışan No",
+      "description": "Çalışan benzersiz kimliği"
+    },
+    "HumanResources.Employee.JobTitle": {
+      "alias": "Unvan",
+      "description": "İş unvanı"
+    },
+    "HumanResources.Employee.HireDate": {
+      "alias": "İşe Başlama Tarihi",
+      "description": "İşe giriş tarihi"
+    },
+    "HumanResources.Employee.BirthDate": {
+      "alias": "Doğum Tarihi",
+      "description": "Doğum tarihi"
+    },
+    "HumanResources.Employee.Gender": {
+      "alias": "Cinsiyet",
+      "description": "Cinsiyet"
+    },
+    "HumanResources.Employee.VacationHours": {
+      "alias": "İzin Saatleri",
+      "description": "Kullanılabilir yıllık izin"
+    },
+    "HumanResources.Employee.SickLeaveHours": {
+      "alias": "Hastalık İzni",
+      "description": "Kullanılabilir hastalık izni"
+    },
+    "HumanResources.Department.DepartmentID": {
+      "alias": "Departman No",
+      "description": "Departman kimliği"
+    },
+    "HumanResources.Department.Name": {
+      "alias": "Departman Adı",
+      "description": "Departman adı"
+    },
+    "HumanResources.Department.GroupName": {
+      "alias": "Grup Adı",
+      "description": "Departman grubu"
+    },
+    "Purchasing.Vendor.BusinessEntityID": {
+      "alias": "Tedarikçi No",
+      "description": "Tedarikçi kimliği"
+    },
+    "Purchasing.Vendor.Name": {
+      "alias": "Tedarikçi Adı",
+      "description": "Tedarikçi şirket adı"
+    },
+    "Purchasing.Vendor.CreditRating": {
+      "alias": "Kredi Notu",
+      "description": "Tedarikçi kredi notu (1-5)"
+    },
+    "Purchasing.Vendor.ActiveFlag": {
+      "alias": "Aktif Mi",
+      "description": "Tedarikçi aktif durumu"
+    },
+    "Purchasing.PurchaseOrderHeader.PurchaseOrderID": {
+      "alias": "Satın Alma Sipariş No",
+      "description": "Satın alma sipariş kimliği"
+    },
+    "Purchasing.PurchaseOrderHeader.OrderDate": {
+      "alias": "Sipariş Tarihi",
+      "description": "Sipariş tarihi"
+    },
+    "Purchasing.PurchaseOrderHeader.TotalDue": {
+      "alias": "Toplam Tutar",
+      "description": "Sipariş toplam tutarı"
+    },
+    "Purchasing.PurchaseOrderHeader.VendorID": {
+      "alias": "Tedarikçi No",
+      "description": "Sipariş verilen tedarikçi"
+    },
+    "Purchasing.ShipMethod.ShipMethodID": {
+      "alias": "Sevkiyat Yöntemi No",
+      "description": "Sevkiyat yöntemi kimliği"
+    },
+    "Purchasing.ShipMethod.Name": {
+      "alias": "Sevkiyat Yöntemi",
+      "description": "Sevkiyat/kargo yöntemi adı"
+    },
+    "Purchasing.ShipMethod.ShipBase": {
+      "alias": "Baz Ücret",
+      "description": "Sevkiyat temel ücreti"
+    },
+    "Purchasing.ShipMethod.ShipRate": {
+      "alias": "Oran",
+      "description": "Ağırlık başına ek ücret"
+    }
+  }
+}

@@ -1,0 +1,288 @@
+<div class="report-container" [class.embedded]="isEmbedded()">
+  <!-- Header -->
+  <div class="report-header">
+    <div class="header-content">
+      <div class="header-title">
+        <i class="fas fa-users"></i>
+        <h1>En Değerli Müşteriler Raporu</h1>
+      </div>
+      <div class="header-actions">
+        <p-button 
+          label="Excel'e Aktar" 
+          icon="fas fa-file-excel" 
+          [outlined]="true"
+          severity="success"
+          (onClick)="exportToExcel()"
+          [disabled]="isLoadingData() || customers().length === 0">
+        </p-button>
+        <p-button 
+          label="PDF'e Aktar" 
+          icon="fas fa-file-pdf" 
+          [outlined]="true"
+          severity="danger"
+          (onClick)="exportToPdf()"
+          [disabled]="isLoadingData() || customers().length === 0">
+        </p-button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Filters -->
+  <div class="report-filters">
+    <p-card>
+      <div class="filters-content">
+        <div class="filter-row">
+          <div class="filter-item">
+            <label>Tarih Aralığı</label>
+            <p-datepicker 
+              [(ngModel)]="rangeDates" 
+              selectionMode="range" 
+              [readonlyInput]="true"
+              [showIcon]="true"
+              placeholder="Tarih aralığı seçin"
+              [disabled]="isLoadingFilters()">
+            </p-datepicker>
+          </div>
+          
+          <div class="filter-item">
+            <label>Bölge</label>
+            <p-multiSelect 
+              [(ngModel)]="selectedTerritories" 
+              [options]="territories()" 
+              optionLabel="label" 
+              optionValue="value"
+              placeholder="Bölge seçin"
+              [disabled]="isLoadingFilters()"
+              [showClear]="true"
+              display="chip">
+            </p-multiSelect>
+          </div>
+          
+          <div class="filter-item">
+            <label>Top N</label>
+            <p-select 
+              [(ngModel)]="topCount" 
+              [options]="[5, 10, 20, 50, 100]" 
+              placeholder="Kaç müşteri?"
+              [disabled]="isLoadingFilters()">
+            </p-select>
+          </div>
+        </div>
+        
+        <div class="filter-actions">
+          <p-button 
+            label="Filtrele" 
+            icon="fas fa-filter" 
+            (onClick)="applyFilters()"
+            [disabled]="isLoadingData() || isLoadingFilters()">
+          </p-button>
+          <p-button 
+            label="Temizle" 
+            icon="fas fa-times" 
+            severity="secondary"
+            [outlined]="true"
+            (onClick)="clearFilters()"
+            [disabled]="isLoadingData() || isLoadingFilters()">
+          </p-button>
+        </div>
+      </div>
+    </p-card>
+  </div>
+
+  <!-- KPI Cards -->
+  @if (isLoadingData()) {
+    <div class="kpi-cards">
+      @for (item of [1,2,3,4]; track item) {
+        <p-card>
+          <p-skeleton height="100px"></p-skeleton>
+        </p-card>
+      }
+    </div>
+  } @else {
+    <div class="kpi-cards">
+      <p-card class="kpi-card">
+        <div class="kpi-content">
+          <div class="kpi-icon" style="background: linear-gradient(135deg, #10b981 0%, #059669 100%);">
+            <i class="fas fa-users"></i>
+          </div>
+          <div class="kpi-info">
+            <p class="kpi-label">Toplam Müşteri</p>
+            <p class="kpi-value">{{ totalCustomers() }}</p>
+          </div>
+        </div>
+      </p-card>
+      
+      <p-card class="kpi-card">
+        <div class="kpi-content">
+          <div class="kpi-icon" style="background: linear-gradient(135deg, #6366f1 0%, #8b5cf6 100%);">
+            <i class="fas fa-dollar-sign"></i>
+          </div>
+          <div class="kpi-info">
+            <p class="kpi-label">Toplam Alışveriş Tutarı</p>
+            <p class="kpi-value">{{ formatCurrency(totalPurchaseAmount()) }}</p>
+          </div>
+        </div>
+      </p-card>
+      
+      <p-card class="kpi-card">
+        <div class="kpi-content">
+          <div class="kpi-icon" style="background: linear-gradient(135deg, #f59e0b 0%, #d97706 100%);">
+            <i class="fas fa-shopping-cart"></i>
+          </div>
+          <div class="kpi-info">
+            <p class="kpi-label">Ortalama Sipariş Tutarı</p>
+            <p class="kpi-value">{{ formatCurrency(averageOrderAmount()) }}</p>
+          </div>
+        </div>
+      </p-card>
+      
+      <p-card class="kpi-card">
+        <div class="kpi-content">
+          <div class="kpi-icon" style="background: linear-gradient(135deg, #ef4444 0%, #dc2626 100%);">
+            <i class="fas fa-list"></i>
+          </div>
+          <div class="kpi-info">
+            <p class="kpi-label">Toplam Sipariş Sayısı</p>
+            <p class="kpi-value">{{ formatNumber(totalOrderCount()) }}</p>
+          </div>
+        </div>
+      </p-card>
+    </div>
+  }
+
+  <!-- Charts -->
+  @if (isLoadingData()) {
+    <div class="charts-section">
+      <p-card>
+        <p-skeleton height="400px"></p-skeleton>
+      </p-card>
+    </div>
+  } @else if (customers().length > 0) {
+    <div class="charts-section">
+      <div class="chart-row">
+        <p-card class="chart-card">
+          <div class="chart-container">
+            <apx-chart
+              *ngIf="barChartOptions && barChartOptions.series"
+              [series]="barChartOptions.series!"
+              [chart]="barChartOptions.chart!"
+              [xaxis]="barChartOptions.xaxis!"
+              [yaxis]="barChartOptions.yaxis!"
+              [dataLabels]="barChartOptions.dataLabels!"
+              [plotOptions]="barChartOptions.plotOptions!"
+              [fill]="barChartOptions.fill!"
+              [tooltip]="barChartOptions.tooltip!"
+              [title]="barChartOptions.title!"
+              [colors]="barChartOptions.colors!">
+            </apx-chart>
+          </div>
+        </p-card>
+      </div>
+      
+      <div class="chart-row">
+        <p-card class="chart-card">
+          <div class="chart-container">
+            <apx-chart
+              *ngIf="pieChartOptions && pieChartOptions.series"
+              [series]="pieChartOptions.series!"
+              [chart]="pieChartOptions.chart!"
+              [labels]="pieChartOptions.labels"
+              [dataLabels]="pieChartOptions.dataLabels!"
+              [legend]="pieChartOptions.legend!"
+              [tooltip]="pieChartOptions.tooltip!"
+              [title]="pieChartOptions.title!"
+              [colors]="pieChartOptions.colors!">
+            </apx-chart>
+          </div>
+        </p-card>
+      </div>
+    </div>
+  }
+
+  <!-- Data Table -->
+  @if (isLoadingData()) {
+    <p-card>
+      <p-skeleton height="400px"></p-skeleton>
+    </p-card>
+  } @else if (customers().length > 0) {
+    <p-card class="table-card">
+      <div class="table-header">
+        <h3>Müşteri Detayları</h3>
+        <p class="table-subtitle">{{ customers().length }} müşteri listeleniyor</p>
+      </div>
+      <p-table 
+        [value]="customers()" 
+        [paginator]="true" 
+        [rows]="10"
+        [rowsPerPageOptions]="[10, 20, 50]"
+        [showCurrentPageReport]="true"
+        currentPageReportTemplate="Toplam {totalRecords} kayıttan {first} - {last} arası gösteriliyor"
+        [globalFilterFields]="['customerName', 'emailAddress', 'territoryName']"
+        styleClass="p-datatable-striped">
+        <ng-template pTemplate="header">
+          <tr>
+            <th>Sıra</th>
+            <th pSortableColumn="customerName">
+              Müşteri Adı <p-sortIcon field="customerName"></p-sortIcon>
+            </th>
+            <th pSortableColumn="emailAddress">
+              E-posta <p-sortIcon field="emailAddress"></p-sortIcon>
+            </th>
+            <th pSortableColumn="territoryName">
+              Bölge <p-sortIcon field="territoryName"></p-sortIcon>
+            </th>
+            <th pSortableColumn="totalPurchaseAmount">
+              Toplam Alışveriş Tutarı <p-sortIcon field="totalPurchaseAmount"></p-sortIcon>
+            </th>
+            <th pSortableColumn="orderCount">
+              Sipariş Sayısı <p-sortIcon field="orderCount"></p-sortIcon>
+            </th>
+            <th pSortableColumn="averageOrderAmount">
+              Ort. Sipariş Tutarı <p-sortIcon field="averageOrderAmount"></p-sortIcon>
+            </th>
+            <th pSortableColumn="lastOrderDate">
+              Son Sipariş Tarihi <p-sortIcon field="lastOrderDate"></p-sortIcon>
+            </th>
+          </tr>
+        </ng-template>
+        <ng-template pTemplate="body" let-customer let-rowIndex="rowIndex">
+          <tr>
+            <td>
+              <p-tag [value]="(rowIndex + 1).toString()" severity="info"></p-tag>
+            </td>
+            <td>{{ customer.customerName }}</td>
+            <td>{{ customer.emailAddress || '-' }}</td>
+            <td>
+              <p-tag [value]="customer.territoryName || '-'" severity="secondary"></p-tag>
+            </td>
+            <td>
+              <strong class="text-success">{{ formatCurrency(customer.totalPurchaseAmount) }}</strong>
+            </td>
+            <td>
+              <strong>{{ formatNumber(customer.orderCount) }}</strong>
+            </td>
+            <td>{{ formatCurrency(customer.averageOrderAmount) }}</td>
+            <td>{{ formatDate(customer.lastOrderDate) }}</td>
+          </tr>
+        </ng-template>
+        <ng-template pTemplate="emptymessage">
+          <tr>
+            <td colspan="8" class="text-center p-4">
+              <i class="fas fa-inbox fa-2x text-muted mb-3"></i>
+              <p class="text-muted">Veri bulunamadı</p>
+            </td>
+          </tr>
+        </ng-template>
+      </p-table>
+    </p-card>
+  } @else {
+    <p-card>
+      <div class="empty-state">
+        <i class="fas fa-inbox fa-3x text-muted mb-3"></i>
+        <h3>Veri Bulunamadı</h3>
+        <p class="text-muted">Seçilen filtreler için veri bulunamadı. Lütfen farklı filtreler deneyin.</p>
+      </div>
+    </p-card>
+  }
+</div>
+

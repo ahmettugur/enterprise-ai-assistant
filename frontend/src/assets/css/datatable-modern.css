@@ -1,0 +1,360 @@
+/* Clean Modern DataTable Styles */
+/* Font imported in index.html */
+
+/* Container Styling */
+.modern-datatable-wrapper {
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif !important;
+    background: #ffffff !important;
+    border-radius: 12px !important;
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06) !important;
+    border: 1px solid #e0e0e0 !important;
+    overflow: hidden !important;
+    transition: all 0.3s ease !important;
+    position: relative !important;
+}
+
+.modern-datatable-wrapper:hover {
+    transform: translateY(-2px) !important;
+    box-shadow: 0 8px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05) !important;
+}
+
+.modern-datatable-wrapper::before {
+    content: '' !important;
+    position: absolute !important;
+    top: 0 !important;
+    left: 0 !important;
+    right: 0 !important;
+    height: 3px !important;
+    background: #2196f3 !important;
+    z-index: 1 !important;
+}
+
+/* DataTable wrapper */
+.dataTables_wrapper {
+    padding: 24px !important;
+    background: #ffffff !important;
+}
+
+/* Header Controls */
+.dataTables_wrapper .dataTables_length,
+.dataTables_wrapper .dataTables_filter {
+    margin-bottom: 20px !important;
+    padding: 16px !important;
+    background: #f5f5f5 !important;
+    border-radius: 8px !important;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05) !important;
+    transition: all 0.3s ease !important;
+}
+
+.dataTables_wrapper .dataTables_length:hover,
+.dataTables_wrapper .dataTables_filter:hover {
+    background: #eeeeee !important;
+    transform: translateY(-1px) !important;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.08) !important;
+}
+
+.dataTables_wrapper .dataTables_length label,
+.dataTables_wrapper .dataTables_filter label {
+    font-weight: 600 !important;
+    color: #1e293b !important;
+    margin-bottom: 0 !important;
+    display: flex !important;
+    align-items: center !important;
+    gap: 8px !important;
+    font-size: 14px !important;
+    text-shadow: 0 1px 2px rgba(0, 0, 0, 0.05) !important;
+}
+
+/* Search Input */
+.dataTables_wrapper .dataTables_filter input[type="search"] {
+    border: 1px solid #e0e0e0 !important;
+    border-radius: 8px !important;
+    padding: 10px 16px !important;
+    font-size: 14px !important;
+    transition: all 0.3s ease !important;
+    background: #ffffff !important;
+    width: 250px !important;
+    font-weight: 500 !important;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05) !important;
+    color: #424242 !important;
+}
+
+.dataTables_wrapper .dataTables_filter input[type="search"]:focus {
+    outline: none !important;
+    border-color: #2196f3 !important;
+    background: #ffffff !important;
+    box-shadow: 0 0 0 3px rgba(33, 150, 243, 0.15), 0 2px 4px rgba(0, 0, 0, 0.05) !important;
+    transform: translateY(-1px) !important;
+}
+
+/* Length Select */
+.dataTables_wrapper .dataTables_length select {
+    border: 1px solid #e0e0e0 !important;
+    border-radius: 8px !important;
+    padding: 10px 16px !important;
+    font-size: 14px !important;
+    background: #ffffff !important;
+    font-weight: 500 !important;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05) !important;
+    color: #424242 !important;
+    transition: all 0.3s ease !important;
+    cursor: pointer !important;
+}
+
+.dataTables_wrapper .dataTables_length select:focus {
+    outline: none !important;
+    border-color: #2196f3 !important;
+    background: #ffffff !important;
+    box-shadow: 0 0 0 3px rgba(33, 150, 243, 0.15), 0 2px 4px rgba(0, 0, 0, 0.05) !important;
+    transform: translateY(-1px) !important;
+}
+
+/* Table Styling */
+.dataTable {
+    border-collapse: separate !important;
+    border-spacing: 0 !important;
+    width: 100% !important;
+    margin-top: 16px !important;
+    border: 1px solid #e5e7eb !important;
+    border-radius: 8px !important;
+    overflow: hidden !important;
+}
+
+/* Table Header Row */
+.dataTable thead tr {
+    background: #e0f2fe !important;
+    border-radius: 8px 8px 0 0 !important;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05) !important;
+    transition: all 0.3s ease !important;
+}
+
+.dataTable thead tr:hover {
+    background: #b3e5fc !important;
+    transform: translateY(-1px) !important;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.08) !important;
+}
+
+/* Table Header Cells */
+.dataTable thead th {
+    background: transparent !important;
+    border-bottom: 1px solid #e5e7eb !important;
+    font-weight: 600 !important;
+    text-transform: none !important;
+    font-size: 14px !important;
+    color: #1565c0 !important;
+    padding: 12px 16px !important;
+    text-align: left !important;
+    position: relative !important;
+    transition: all 0.3s ease !important;
+}
+
+.dataTable thead th:not(:last-child) {
+    border-right: 1px solid rgba(255, 255, 255, 0.2) !important;
+}
+
+.dataTable thead th:hover {
+    background: linear-gradient(135deg, #5a67d8 0%, #667eea 100%) !important;
+    transform: translateY(-2px) !important;
+    box-shadow: 0 8px 15px -3px rgba(0, 0, 0, 0.2) !important;
+}
+
+.dataTable thead th:first-child {
+    border-radius: 8px 0 0 0 !important;
+}
+
+.dataTable thead th:last-child {
+    border-radius: 0 8px 0 0 !important;
+}
+
+/* Table Body */
+.dataTable tbody td {
+    padding: 12px 16px !important;
+    border-bottom: 1px solid #f1f5f9 !important;
+    font-size: 14px !important;
+    color: #475569 !important;
+    vertical-align: middle !important;
+    transition: all 0.3s ease !important;
+    background: rgba(255, 255, 255, 0.8) !important;
+}
+
+.dataTable tbody td:not(:last-child) {
+    border-right: 1px solid #f3f4f6;
+}
+
+.dataTable tbody tr:hover {
+    background: linear-gradient(135deg, #f8fafc 0%, #e2e8f0 100%) !important;
+    transform: translateX(4px) !important;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1) !important;
+}
+
+.dataTable tbody tr:hover td {
+    background: transparent !important;
+    color: #1e293b !important;
+    font-weight: 500 !important;
+}
+
+.dataTable tbody tr:last-child td {
+    border-bottom: none;
+}
+
+/* Sorting Indicators */
+.dataTable thead th.sorting,
+.dataTable thead th.sorting_asc,
+.dataTable thead th.sorting_desc {
+    cursor: pointer;
+    padding-right: 30px;
+}
+
+.dataTable thead th.sorting:after,
+.dataTable thead th.sorting_asc:after,
+.dataTable thead th.sorting_desc:after {
+    position: absolute;
+    right: 8px;
+    top: 50%;
+    transform: translateY(-50%);
+    font-family: 'Font Awesome 5 Free';
+    font-weight: 900;
+    font-size: 12px;
+    color: #9ca3af;
+}
+
+.dataTable thead th.sorting:after {
+    content: '\f0dc';
+}
+
+.dataTable thead th.sorting_asc:after {
+    content: '\f0de';
+    color: #3b82f6;
+}
+
+.dataTable thead th.sorting_desc:after {
+    content: '\f0dd';
+    color: #3b82f6;
+}
+
+/* Pagination */
+.dataTables_wrapper .dataTables_paginate {
+    margin-top: 20px !important;
+    display: flex !important;
+    justify-content: center !important;
+    align-items: center !important;
+    gap: 4px !important;
+}
+
+.dataTables_wrapper .dataTables_paginate .paginate_button {
+    display: inline-flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    padding: 8px 12px !important;
+    margin: 0 !important;
+    font-size: 14px !important;
+    font-weight: 600 !important;
+    color: #475569 !important;
+    background: linear-gradient(135deg, #ffffff 0%, #f8fafc 100%) !important;
+    border: 1px solid #e2e8f0 !important;
+    border-radius: 8px !important;
+    text-decoration: none !important;
+    transition: all 0.3s ease !important;
+    cursor: pointer !important;
+    min-width: 36px !important;
+    height: 36px !important;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05) !important;
+    text-shadow: 0 1px 2px rgba(0, 0, 0, 0.05) !important;
+}
+
+.dataTables_wrapper .dataTables_paginate .paginate_button:hover {
+    background: #e3f2fd !important;
+    border-color: #90caf9 !important;
+    color: #1565c0 !important;
+    transform: translateY(-1px) !important;
+    box-shadow: 0 3px 6px rgba(33, 150, 243, 0.2) !important;
+}
+
+.dataTables_wrapper .dataTables_paginate .paginate_button.current {
+    background: #2196f3 !important;
+    border-color: #2196f3 !important;
+    color: #ffffff !important;
+    box-shadow: 0 2px 4px rgba(33, 150, 243, 0.3) !important;
+    transform: scale(1.02) !important;
+}
+
+.dataTables_wrapper .dataTables_paginate .paginate_button.current:hover {
+    background: #2563eb !important;
+    border-color: #2563eb !important;
+}
+
+.dataTables_wrapper .dataTables_paginate .paginate_button.disabled {
+    color: #9ca3af !important;
+    background: #f9fafb !important;
+    border-color: #e5e7eb !important;
+    cursor: not-allowed !important;
+}
+
+.dataTables_wrapper .dataTables_paginate .paginate_button.disabled:hover {
+    background: #f9fafb;
+    border-color: #e5e7eb;
+    color: #9ca3af;
+}
+
+/* Info Text */
+.dataTables_wrapper .dataTables_info {
+    font-size: 14px;
+    color: #6b7280;
+    font-weight: 400;
+    margin-top: 16px;
+    text-align: center;
+}
+
+/* Loading Animation */
+@keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+}
+
+.datatable-loading {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(255, 255, 255, 0.9);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    z-index: 1000;
+    border-radius: 8px;
+}
+
+.loading-spinner {
+    width: 32px;
+    height: 32px;
+    border: 3px solid #e5e7eb;
+    border-top: 3px solid #3b82f6;
+    border-radius: 50%;
+    animation: spin 1s linear infinite;
+    margin-bottom: 12px;
+}
+
+.datatable-loading span {
+    color: #6b7280;
+    font-size: 14px;
+    font-weight: 500;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+    .dataTables_wrapper {
+        padding: 16px;
+    }
+    
+    .dataTables_wrapper .dataTables_filter input[type="search"] {
+        width: 200px;
+    }
+    
+    .dataTable thead th,
+    .dataTable tbody td {
+        padding: 8px 12px;
+        font-size: 13px;
+    }
+}

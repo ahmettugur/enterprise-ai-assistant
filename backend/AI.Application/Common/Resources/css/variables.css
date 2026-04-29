@@ -1,0 +1,509 @@
+/* CSS Custom Properties (Değişkenler) */
+:root {
+    /* ================================ */
+    /* EXISTING VARIABLES (UNCHANGED) */
+    /* ================================ */
+    /* Ana Renkler */
+    --primary-color: #FF8000;
+    --primary-dark: #e67300;
+    --primary-light: #ff6b35;
+    /* Mavi Tonları */
+    --blue-primary: #3b82f6;
+    --blue-dark: #2563eb;
+    --blue-light: #60a5fa;
+    /* Yeşil Tonları */
+    --green-primary: #10b981;
+    --green-dark: #059669;
+    --green-light: #34d399;
+    /* Kırmızı Tonları */
+    --red-primary: #ef4444;
+    --red-dark: #dc2626;
+    --red-light: #f87171;
+    /* Gri Tonları */
+    --gray-50: #f8fafc;
+    --gray-100: #f1f5f9;
+    --gray-150: #e9eef4;
+    --gray-200: #e2e8f0;
+    --gray-300: #cbd5e1;
+    --gray-400: #94a3b8;
+    --gray-500: #64748b;
+    --gray-600: #475569;
+    --gray-700: #334155;
+    --gray-800: #1e293b;
+    --gray-900: #0f172a;
+    /* Gradyentler */
+    --gradient-primary: linear-gradient(135deg, #FF8000 0%, #ff6b35 100%);
+    --gradient-blue: linear-gradient(135deg, #3b82f6 0%, #2563eb 100%);
+    --gradient-green: linear-gradient(135deg, #10b981 0%, #059669 100%);
+    --gradient-red: linear-gradient(135deg, #ef4444 0%, #dc2626 100%);
+    --gradient-purple: linear-gradient(135deg, #8b5cf6 0%, #7c3aed 100%);
+    --gradient-background: linear-gradient(135deg, #ffffff 0%, #f8fafc 100%);
+    --gradient-header: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    --gradient-indigo: linear-gradient(135deg, #6366f1 0%, #4f46e5 100%);
+    --gradient-cyan: linear-gradient(135deg, #06b6d4 0%, #0891b2 100%);
+    --gradient-teal: linear-gradient(135deg, #14b8a6 0%, #0d9488 100%);
+    --gradient-pink: linear-gradient(135deg, #ec4899 0%, #db2777 100%);
+    --gradient-amber: linear-gradient(135deg, #f59e0b 0%, #d97706 100%);
+    --gradient-lime: linear-gradient(135deg, #84cc16 0%, #65a30d 100%);
+    --gradient-ocean: linear-gradient(135deg, #0ea5e9 0%, #06b6d4 50%, #0891b2 100%);
+    --gradient-sunset: linear-gradient(135deg, #f97316 0%, #ea580c 50%, #dc2626 100%);
+    --gradient-forest: linear-gradient(135deg, #16a34a 0%, #15803d 50%, #166534 100%);
+    --gradient-royal: linear-gradient(135deg, #7c3aed 0%, #6366f1 50%, #4f46e5 100%);
+    --gradient-fire: linear-gradient(135deg, #dc2626 0%, #ea580c 50%, #f59e0b 100%);
+    --gradient-ice: linear-gradient(135deg, #0ea5e9 0%, #3b82f6 50%, #6366f1 100%);
+    --gradient-cosmic: linear-gradient(135deg, #8b5cf6 0%, #6366f1 50%, #14b8a6 100%);
+    --gradient-aurora: linear-gradient(135deg, #10b981 0%, #06b6d4 50%, #8b5cf6 100%);
+    --gradient-spring: linear-gradient(135deg, #a3e635 0%, #22d3ee 50%, #f472b6 100%);
+    --gradient-summer: linear-gradient(135deg, #fbbf24 0%, #f97316 50%, #ec4899 100%);
+    --gradient-autumn: linear-gradient(135deg, #dc2626 0%, #ea580c 50%, #f59e0b 100%);
+    --gradient-winter: linear-gradient(135deg, #3b82f6 0%, #06b6d4 50%, #8b5cf6 100%);
+    --gradient-gold: linear-gradient(135deg, #ffd700 0%, #f59e0b 50%, #d97706 100%);
+    --gradient-silver: linear-gradient(135deg, #e5e7eb 0%, #9ca3af 50%, #6b7280 100%);
+    --gradient-bronze: linear-gradient(135deg, #d97706 0%, #b45309 50%, #92400e 100%);
+    --gradient-platinum: linear-gradient(135deg, #f3f4f6 0%, #d1d5db 50%, #9ca3af 100%);
+    --gradient-glass-white: linear-gradient(135deg, rgba(255, 255, 255, 0.25) 0%, rgba(255, 255, 255, 0.05) 100%);
+    --gradient-glass-blue: linear-gradient(135deg, rgba(59, 130, 246, 0.25) 0%, rgba(59, 130, 246, 0.05) 100%);
+    --gradient-glass-purple: linear-gradient(135deg, rgba(139, 92, 246, 0.25) 0%, rgba(139, 92, 246, 0.05) 100%);
+    --gradient-glass-green: linear-gradient(135deg, rgba(16, 185, 129, 0.25) 0%, rgba(16, 185, 129, 0.05) 100%);
+    /* Dark Gray-Blue Base Gradients */
+    --gradient-slate: linear-gradient(135deg, #3E5367 0%, #2A3A47 100%);
+    --gradient-slate-light: linear-gradient(135deg, #5A6B7C 0%, #3E5367 100%);
+    --gradient-slate-blue: linear-gradient(135deg, #3E5367 0%, #2563eb 100%);
+    --gradient-slate-cyan: linear-gradient(135deg, #3E5367 0%, #06b6d4 100%);
+    --gradient-slate-teal: linear-gradient(135deg, #3E5367 0%, #14b8a6 100%);
+    --gradient-slate-purple: linear-gradient(135deg, #3E5367 0%, #8b5cf6 100%);
+    /* Multi-color gradients with #3E5367 */
+    --gradient-slate-ocean: linear-gradient(135deg, #3E5367 0%, #06b6d4 50%, #10b981 100%);
+    --gradient-slate-sunset: linear-gradient(135deg, #3E5367 0%, #f59e0b 50%, #dc2626 100%);
+    --gradient-slate-royal: linear-gradient(135deg, #3E5367 0%, #6366f1 50%, #8b5cf6 100%);
+    --gradient-slate-forest: linear-gradient(135deg, #3E5367 0%, #059669 50%, #16a34a 100%);
+    /* Professional/Corporate gradients */
+    --gradient-corporate: linear-gradient(135deg, #3E5367 0%, #475569 50%, #64748b 100%);
+    --gradient-professional: linear-gradient(135deg, #1e293b 0%, #3E5367 50%, #475569 100%);
+    --gradient-business: linear-gradient(135deg, #3E5367 0%, #334155 100%);
+    /* Atmospheric gradients */
+    --gradient-storm: linear-gradient(135deg, #1e293b 0%, #3E5367 50%, #475569 100%);
+    --gradient-midnight: linear-gradient(135deg, #0f172a 0%, #3E5367 50%, #1e293b 100%);
+    --gradient-dawn: linear-gradient(135deg, #3E5367 0%, #64748b 50%, #94a3b8 100%);
+    /* Glass effects with #3E5367 */
+    --gradient-glass-slate: linear-gradient(135deg, rgba(62, 83, 103, 0.25) 0%, rgba(62, 83, 103, 0.05) 100%);
+    --gradient-glass-slate-blue: linear-gradient(135deg, rgba(62, 83, 103, 0.3) 0%, rgba(37, 99, 235, 0.1) 100%);
+    /* ================================ */
+    /* MASSIVE GRADIENT COLLECTION */
+    /* ================================ */
+    /* Doğa Gradyentleri */
+    --gradient-forest-deep: linear-gradient(135deg, #013220 0%, #228B22 50%, #8FBC8F 100%);
+    --gradient-jungle: linear-gradient(135deg, #01796F 0%, #50C878 50%, #98FB98 100%);
+    --gradient-meadow: linear-gradient(135deg, #6B8E23 0%, #9CAF88 50%, #93E9BE 100%);
+    --gradient-pine-forest: linear-gradient(135deg, #013220 0%, #01796F 100%);
+    --gradient-spring-meadow: linear-gradient(135deg, #98FB98 0%, #50C878 50%, #228B22 100%);
+    /* Okyanus Gradyentleri */
+    --gradient-deep-ocean: linear-gradient(135deg, #003366 0%, #006994 50%, #40E0D0 100%);
+    --gradient-tropical-water: linear-gradient(135deg, #40E0D0 0%, #00FFFF 50%, #87CEEB 100%);
+    --gradient-arctic: linear-gradient(135deg, #B0E0E6 0%, #87CEEB 50%, #4682B4 100%);
+    --gradient-navy-depths: linear-gradient(135deg, #000080 0%, #4169E1 50%, #6495ED 100%);
+    /* Gün Batımı ve Gün Doğumu */
+    --gradient-sunset-tropical: linear-gradient(135deg, #FF4500 0%, #FFA500 50%, #FFD700 100%);
+    --gradient-dawn-sky: linear-gradient(135deg, #87CEEB 0%, #FFA500 50%, #FF69B4 100%);
+    --gradient-twilight: linear-gradient(135deg, #2E0249 0%, #6F42C1 50%, #A663CC 100%);
+    --gradient-sunrise: linear-gradient(135deg, #FFD700 0%, #FFA500 50%, #FF4500 100%);
+    /* Neon Gradyentleri */
+    --gradient-neon-party: linear-gradient(135deg, #FF1493 0%, #39FF14 50%, #7DF9FF 100%);
+    --gradient-cyber: linear-gradient(135deg, #1B03A3 0%, #58427C 50%, #FF9966 100%);
+    --gradient-electric: linear-gradient(135deg, #7DF9FF 0%, #39FF14 50%, #FFFF66 100%);
+    --gradient-hot-neon: linear-gradient(135deg, #FF69B4 0%, #FF1493 100%);
+    /* Pastel Gradyentleri */
+    --gradient-pastel-dream: linear-gradient(135deg, #FFD1DC 0%, #AEC6CF 50%, #C1E1C1 100%);
+    --gradient-cotton-candy: linear-gradient(135deg, #FFD1DC 0%, #E6E6FA 100%);
+    --gradient-baby-colors: linear-gradient(135deg, #89CFF0 0%, #FFD1DC 50%, #C1E1C1 100%);
+    --gradient-soft-rainbow: linear-gradient(135deg, #FFFACD 0%, #FFD1DC 25%, #AEC6CF 50%, #C1E1C1 75%, #E6E6FA 100%);
+    /* Retro/Vintage Gradyentleri */
+    --gradient-retro-sunset: linear-gradient(135deg, #FF8C42 0%, #FFD23F 50%, #EE4B2B 100%);
+    --gradient-80s-vibe: linear-gradient(135deg, #6F42C1 0%, #D63384 50%, #FF8C42 100%);
+    --gradient-vintage-poster: linear-gradient(135deg, #FFDB58 0%, #CC5500 50%, #568203 100%);
+    --gradient-retro-tech: linear-gradient(135deg, #4A90E2 0%, #7ED321 100%);
+    /* Cosmic Gradyentleri */
+    --gradient-galaxy: linear-gradient(135deg, #2E0249 0%, #0D1B2A 50%, #36454F 100%);
+    --gradient-nebula: linear-gradient(135deg, #A663CC 0%, #6F42C1 50%, #2E0249 100%);
+    --gradient-solar-system: linear-gradient(135deg, #FFD700 0%, #FFA500 25%, #CD5C5C 50%, #8B4513 75%, #36454F 100%);
+    --gradient-starfield: linear-gradient(135deg, #0D1B2A 0%, #2E0249 50%, #F8F8FF 100%);
+    /* Food Gradyentleri */
+    --gradient-berry-mix: linear-gradient(135deg, #FC5A8D 0%, #4F86F7 50%, #6F2DA8 100%);
+    --gradient-citrus: linear-gradient(135deg, #FFF700 0%, #FFA500 50%, #32CD32 100%);
+    --gradient-tropical-fruit: linear-gradient(135deg, #FFCC5C 0%, #FFE135 50%, #8EE53F 100%);
+    --gradient-dessert: linear-gradient(135deg, #3C1810 0%, #C68E17 50%, #F3E5AB 100%);
+    --gradient-wine-tasting: linear-gradient(135deg, #722F37 0%, #6F2DA8 50%, #6F4E37 100%);
+    /* Gemstone Gradyentleri */
+    --gradient-precious: linear-gradient(135deg, #E0115F 0%, #0F52BA 50%, #50C878 100%);
+    --gradient-royal-gems: linear-gradient(135deg, #9966CC 0%, #E0115F 50%, #0F52BA 100%);
+    --gradient-treasure: linear-gradient(135deg, #FFC87C 0%, #B9F2FF 50%, #EAE0C8 100%);
+    --gradient-mystical: linear-gradient(135deg, #A8C3BC 0%, #30D5C8 50%, #733635 100%);
+    /* Seasonal Gradyentleri */
+    --gradient-spring-bloom: linear-gradient(135deg, #98FB98 0%, #FFD1DC 50%, #FFFACD 100%);
+    --gradient-summer-heat: linear-gradient(135deg, #FFD700 0%, #FF4500 50%, #FF1493 100%);
+    --gradient-autumn-leaves: linear-gradient(135deg, #CC5500 0%, #FFD23F 50%, #8B4513 100%);
+    --gradient-winter-frost: linear-gradient(135deg, #B0E0E6 0%, #F8F8FF 50%, #87CEEB 100%);
+    /* Mood Gradyentleri */
+    --gradient-calm: linear-gradient(135deg, #AEC6CF 0%, #C1E1C1 50%, #F5FFFA 100%);
+    --gradient-energetic: linear-gradient(135deg, #FF4500 0%, #FFD700 50%, #39FF14 100%);
+    --gradient-romantic: linear-gradient(135deg, #FFD1DC 0%, #FF69B4 50%, #E6E6FA 100%);
+    --gradient-mysterious: linear-gradient(135deg, #2E0249 0%, #36454F 50%, #6F42C1 100%);
+    --gradient-peaceful: linear-gradient(135deg, #87CEEB 0%, #98FB98 50%, #FFFACD 100%);
+    /* Multi-Directional Gradyentleri */
+    --gradient-radial-sunset: radial-gradient(circle, #FFD700 0%, #FFA500 50%, #FF4500 100%);
+    --gradient-radial-ocean: radial-gradient(circle, #40E0D0 0%, #006994 50%, #003366 100%);
+    --gradient-conic-rainbow: conic-gradient(from 0deg, #FF0000, #FF8000, #FFFF00, #80FF00, #00FF00, #00FF80, #00FFFF, #0080FF, #0000FF, #8000FF, #FF00FF, #FF0080, #FF0000);
+    /* Complex Multi-Stop Gradyentleri */
+    --gradient-aurora-borealis: linear-gradient(135deg, #98FB98 0%, #40E0D0 20%, #6495ED 40%, #9966CC 60%, #FF69B4 80%, #FFD700 100%);
+    --gradient-fire-phoenix: linear-gradient(135deg, #8B4513 0%, #CC5500 20%, #FF4500 40%, #FFA500 60%, #FFD700 80%, #FFFF00 100%);
+    --gradient-deep-space: linear-gradient(135deg, #0D1B2A 0%, #2E0249 25%, #36454F 50%, #6F42C1 75%, #A663CC 100%);
+    --gradient-tropical-paradise: linear-gradient(135deg, #40E0D0 0%, #98FB98 25%, #FFD700 50%, #FFA500 75%, #FF69B4 100%);
+    /* Monochromatic Gradyentleri */
+    --gradient-blue-mono: linear-gradient(135deg, #87CEEB 0%, #4682B4 25%, #4169E1 50%, #000080 75%, #003366 100%);
+    --gradient-green-mono: linear-gradient(135deg, #98FB98 0%, #50C878 25%, #228B22 50%, #01796F 75%, #013220 100%);
+    --gradient-red-mono: linear-gradient(135deg, #FFD1DC 0%, #FF69B4 25%, #FF1493 50%, #B7410E 75%, #8B0000 100%);
+    --gradient-purple-mono: linear-gradient(135deg, #E6E6FA 0%, #9966CC 25%, #6F42C1 50%, #58427C 75%, #2E0249 100%);
+    /* ================================ */
+    /* EXTENDED COLOR PALETTE & GRADIENTS */
+    /* ================================ */
+    /* Doğa Renkleri */
+    --forest-green: #228B22;
+    --deep-forest: #013220;
+    --moss-green: #8FBC8F;
+    --sage-green: #9CAF88;
+    --olive-green: #6B8E23;
+    --pine-green: #01796F;
+    --emerald: #50C878;
+    --jade: #00A86B;
+    --mint: #98FB98;
+    --seafoam: #93E9BE;
+    /* Deniz ve Gökyüzü Tonları */
+    --ocean-blue: #006994;
+    --deep-sea: #003366;
+    --turquoise: #40E0D0;
+    --aqua: #00FFFF;
+    --sky-blue: #87CEEB;
+    --powder-blue: #B0E0E6;
+    --steel-blue: #4682B4;
+    --navy-blue: #000080;
+    --royal-blue: #4169E1;
+    --cornflower: #6495ED;
+    /* Toprak ve Mineral Tonları */
+    --earth-brown: #8B4513;
+    --chocolate: #D2691E;
+    --sienna: #A0522D;
+    --rust: #B7410E;
+    --copper: #B87333;
+    --bronze-dark: #CD7F32;
+    --clay: #C65D07;
+    --sand: #F4A460;
+    --beige: #F5F5DC;
+    --tan: #D2B48C;
+    /* Neon ve Parlak Renkler */
+    --neon-pink: #FF1493;
+    --neon-green: #39FF14;
+    --neon-blue: #1B03A3;
+    --neon-orange: #FF4500;
+    --neon-yellow: #FFFF00;
+    --electric-blue: #7DF9FF;
+    --hot-pink: #FF69B4;
+    --laser-lemon: #FFFF66;
+    --cyber-grape: #58427C;
+    --atomic-tangerine: #FF9966;
+    /* Pastel Renkler */
+    --pastel-pink: #FFD1DC;
+    --pastel-blue: #AEC6CF;
+    --pastel-green: #C1E1C1;
+    --pastel-yellow: #FFFACD;
+    --pastel-purple: #E6E6FA;
+    --pastel-orange: #FFCCCB;
+    --lavender: #E6E6FA;
+    --peach: #FFCBA4;
+    --baby-blue: #89CFF0;
+    --mint-cream: #F5FFFA;
+    /* Vintage/Retro Renkler */
+    --retro-orange: #FF8C42;
+    --retro-yellow: #FFD23F;
+    --retro-red: #EE4B2B;
+    --retro-blue: #4A90E2;
+    --retro-green: #7ED321;
+    --vintage-pink: #D63384;
+    --vintage-purple: #6F42C1;
+    --mustard: #FFDB58;
+    --burnt-orange: #CC5500;
+    --avocado: #568203;
+    /* Cosmic/Space Renkler */
+    --galaxy-purple: #2E0249;
+    --nebula-pink: #A663CC;
+    --star-white: #F8F8FF;
+    --cosmic-blue: #0D1B2A;
+    --meteor-gray: #36454F;
+    --solar-yellow: #FFD700;
+    --mars-red: #CD5C5C;
+    --venus-orange: #FFA500;
+    --saturn-gold: #FFD700;
+    --jupiter-brown: #8B4513;
+    /* Food Inspired Renkler */
+    --strawberry: #FC5A8D;
+    --blueberry: #4F86F7;
+    --grape: #6F2DA8;
+    --orange-fruit: #FFA500;
+    --lemon: #FFF700;
+    --lime-fruit: #32CD32;
+    --cherry: #DE3163;
+    --apple-red: #FF0800;
+    --banana: #FFE135;
+    --kiwi: #8EE53F;
+    --mango: #FFCC5C;
+    --watermelon: #FF7F7F;
+    --coconut: #F7F7F7;
+    --chocolate-dark: #3C1810;
+    --caramel: #C68E17;
+    --vanilla: #F3E5AB;
+    --coffee: #6F4E37;
+    --wine: #722F37;
+    /* Gemstone Colors */
+    --ruby: #E0115F;
+    --sapphire: #0F52BA;
+    --emerald-gem: #50C878;
+    --diamond: #B9F2FF;
+    --amethyst: #9966CC;
+    --topaz: #FFC87C;
+    --opal: #A8C3BC;
+    --garnet: #733635;
+    --turquoise-gem: #30D5C8;
+    --pearl: #EAE0C8;
+    /* ================================ */
+    /* EXTENDED SHADOW COLLECTION */
+    /* ================================ */
+    /* Colored Shadows for New Colors */
+    --shadow-neon-pink: 0 0 20px rgba(255, 20, 147, 0.6);
+    --shadow-neon-green: 0 0 20px rgba(57, 255, 20, 0.6);
+    --shadow-electric-blue: 0 0 20px rgba(125, 249, 255, 0.6);
+    --shadow-cosmic: 0 0 25px rgba(46, 2, 73, 0.5);
+    --shadow-forest: 0 4px 15px rgba(34, 139, 34, 0.4);
+    --shadow-ocean: 0 4px 15px rgba(0, 105, 148, 0.4);
+    --shadow-sunset: 0 4px 15px rgba(255, 69, 0, 0.4);
+    --shadow-gemstone: 0 4px 15px rgba(224, 17, 95, 0.4);
+    /* 3D Shadows */
+    --shadow-3d-light: 0 2px 4px rgba(0,0,0,0.1), 0 4px 8px rgba(0,0,0,0.1), 0 8px 16px rgba(0,0,0,0.1);
+    --shadow-3d-medium: 0 4px 8px rgba(0,0,0,0.15), 0 8px 16px rgba(0,0,0,0.15), 0 16px 32px rgba(0,0,0,0.15);
+    --shadow-3d-heavy: 0 8px 16px rgba(0,0,0,0.2), 0 16px 32px rgba(0,0,0,0.2), 0 32px 64px rgba(0,0,0,0.2);
+    /* Inner Shadows */
+    --shadow-inner-light: inset 0 2px 4px rgba(0,0,0,0.1);
+    --shadow-inner-medium: inset 0 4px 8px rgba(0,0,0,0.15);
+    --shadow-inner-heavy: inset 0 8px 16px rgba(0,0,0,0.2);
+    /* Shadow Değerleri */
+    --shadow-sm: 0 2px 8px rgba(0, 0, 0, 0.05);
+    --shadow-md: 0 4px 12px rgba(0, 0, 0, 0.1);
+    --shadow-lg: 0 8px 25px rgba(0, 0, 0, 0.1);
+    --shadow-xl: 0 12px 40px rgba(0, 0, 0, 0.15);
+    --shadow-primary: 0 4px 12px rgba(255, 128, 0, 0.3);
+    --shadow-blue: 0 4px 12px rgba(59, 130, 246, 0.3);
+    --shadow-green: 0 4px 12px rgba(16, 185, 129, 0.3);
+    /* Border Radius */
+    --radius-sm: 8px;
+    --radius-md: 12px;
+    --radius-lg: 16px;
+    --radius-xl: 20px;
+    --radius-full: 50%;
+    /* Spacing */
+    --spacing-xs: 8px;
+    --spacing-sm: 12px;
+    --spacing-md: 16px;
+    --spacing-lg: 20px;
+    --spacing-xl: 24px;
+    --spacing-2xl: 30px;
+    /* Typography */
+    --font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    --font-size-xs: 11px;
+    --font-size-sm: 12px;
+    --font-size-base: 14px;
+    --font-size-lg: 16px;
+    --font-size-xl: 18px;
+    --font-size-2xl: 22px;
+    /* Transition */
+    --transition-fast: all 0.2s ease;
+    --transition-normal: all 0.3s ease;
+    --transition-slow: all 0.5s ease;
+    --transition-bounce: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    --transition-smooth: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    /* Z-index */
+    --z-dropdown: 1000;
+    --z-modal: 1500;
+    --z-notification: 2000;
+    --z-tooltip: 2500;
+    /* ================================ */
+    /* NEW ADDITIONAL COLORS (SAFE TO ADD) */
+    /* ================================ */
+    /* Purple Extended */
+    --purple-primary: #8b5cf6;
+    --purple-dark: #7c3aed;
+    --purple-light: #a78bfa;
+    --purple-50: #faf5ff;
+    --purple-100: #f3e8ff;
+    --purple-800: #6b21a8;
+    --purple-900: #581c87;
+    /* Indigo Series */
+    --indigo-primary: #6366f1;
+    --indigo-dark: #4f46e5;
+    --indigo-light: #818cf8;
+    --indigo-50: #eef2ff;
+    --indigo-100: #e0e7ff;
+    --indigo-800: #3730a3;
+    --indigo-900: #312e81;
+    /* Cyan Series */
+    --cyan-primary: #06b6d4;
+    --cyan-dark: #0891b2;
+    --cyan-light: #22d3ee;
+    --cyan-50: #ecfeff;
+    --cyan-100: #cffafe;
+    --cyan-800: #155e75;
+    --cyan-900: #164e63;
+    /* Teal Series */
+    --teal-primary: #14b8a6;
+    --teal-dark: #0d9488;
+    --teal-light: #2dd4bf;
+    --teal-50: #f0fdfa;
+    --teal-100: #ccfbf1;
+    --teal-800: #115e59;
+    --teal-900: #134e4a;
+    /* Pink Series */
+    --pink-primary: #ec4899;
+    --pink-dark: #db2777;
+    --pink-light: #f472b6;
+    --pink-50: #fdf2f8;
+    --pink-100: #fce7f3;
+    --pink-800: #9d174d;
+    --pink-900: #831843;
+    /* Amber/Orange Series */
+    --amber-primary: #f59e0b;
+    --amber-dark: #d97706;
+    --amber-light: #fbbf24;
+    --amber-50: #fffbeb;
+    --amber-100: #fef3c7;
+    --amber-800: #92400e;
+    --amber-900: #78350f;
+    /* Lime Series */
+    --lime-primary: #84cc16;
+    --lime-dark: #65a30d;
+    --lime-light: #a3e635;
+    --lime-50: #f7fee7;
+    --lime-100: #ecfccb;
+    --lime-800: #365314;
+    --lime-900: #1a2e05;
+    /* ================================ */
+    /* NEW ADDITIONAL SHADOWS (SAFE TO ADD) */
+    /* ================================ */
+    /* Extended Color Shadows */
+    --shadow-purple: 0 4px 12px rgba(139, 92, 246, 0.3);
+    --shadow-indigo: 0 4px 12px rgba(99, 102, 241, 0.3);
+    --shadow-cyan: 0 4px 12px rgba(6, 182, 212, 0.3);
+    --shadow-teal: 0 4px 12px rgba(20, 184, 166, 0.3);
+    --shadow-pink: 0 4px 12px rgba(236, 72, 153, 0.3);
+    --shadow-amber: 0 4px 12px rgba(245, 158, 11, 0.3);
+    --shadow-lime: 0 4px 12px rgba(132, 204, 22, 0.3);
+    /* Glow Effects */
+    --glow-sm: 0 0 5px;
+    --glow-md: 0 0 10px;
+    --glow-lg: 0 0 20px;
+    --glow-xl: 0 0 40px;
+    /* ================================ */
+    /* NEW ADDITIONAL SPACING (SAFE TO ADD) */
+    /* ================================ */
+    /* Extended Spacing Options */
+    --spacing-3xl: 36px;
+    --spacing-4xl: 42px;
+    --spacing-5xl: 48px;
+    --spacing-6xl: 60px;
+    --spacing-7xl: 72px;
+    --spacing-8xl: 96px;
+    /* Micro Spacing */
+    --spacing-px: 1px;
+    --spacing-0-5: 2px;
+    --spacing-1: 4px;
+    --spacing-1-5: 6px;
+    --spacing-2: 8px;
+    --spacing-2-5: 10px;
+    --spacing-3: 12px;
+    /* ================================ */
+    /* NEW ADDITIONAL RADIUS (SAFE TO ADD) */
+    /* ================================ */
+    /* Extended Radius Options */
+    --radius-none: 0px;
+    --radius-xs: 4px;
+    --radius-2xl: 24px;
+    --radius-3xl: 32px;
+    --radius-4xl: 40px;
+    /* ================================ */
+    /* NEW ADDITIONAL TYPOGRAPHY (SAFE TO ADD) */
+    /* ================================ */
+    /* Extended Font Sizes */
+    --font-size-3xl: 28px;
+    --font-size-4xl: 36px;
+    --font-size-5xl: 48px;
+    /* Font Weights */
+    --font-weight-light: 300;
+    --font-weight-normal: 400;
+    --font-weight-medium: 500;
+    --font-weight-semibold: 600;
+    --font-weight-bold: 700;
+    --font-weight-extrabold: 800;
+    /* ================================ */
+    /* NEW ADDITIONAL TRANSITIONS (SAFE TO ADD) */
+    /* ================================ */
+    /* Specialized Transitions */
+    --transition-spring: all 0.3s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+    --transition-elastic: all 0.5s cubic-bezier(0.68, -0.6, 0.32, 1.6);
+    --transition-colors: color 0.3s ease, background-color 0.3s ease, border-color 0.3s ease;
+    --transition-transform: transform 0.3s ease;
+    --transition-opacity: opacity 0.3s ease;
+    /* ================================ */
+    /* NEW ADDITIONAL Z-INDEX (SAFE TO ADD) */
+    /* ================================ */
+    /* Extended Z-Index */
+    --z-base: 0;
+    --z-elevated: 100;
+    --z-overlay: 200;
+    --z-sticky: 300;
+    --z-drawer: 400;
+    --z-header: 500;
+    --z-backdrop: 600;
+    --z-popover: 700;
+    --z-floating: 800;
+    --z-dialog: 900;
+    /* ================================ */
+    /* THEME VARIANT VARIABLES (SAFE TO ADD) */
+    /* ================================ */
+    /* Light Theme Variants */
+    --theme-light-bg: var(--gray-50);
+    --theme-light-surface: #ffffff;
+    --theme-light-border: var(--gray-200);
+    --theme-light-text: var(--gray-900);
+    --theme-light-text-muted: var(--gray-600);
+    /* Dark Theme Variants */
+    --theme-dark-bg: var(--gray-900);
+    --theme-dark-surface: var(--gray-800);
+    --theme-dark-border: var(--gray-700);
+    --theme-dark-text: var(--gray-100);
+    --theme-dark-text-muted: var(--gray-400);
+    /* ================================ */
+    /* ANIMATION DURATIONS (SAFE TO ADD) */
+    /* ================================ */
+
+    --duration-instant: 0ms;
+    --duration-fast: 150ms;
+    --duration-normal: 300ms;
+    --duration-slow: 500ms;
+    --duration-slower: 700ms;
+    --duration-slowest: 1000ms;
+    /* ================================ */
+    /* BREAKPOINT HELPERS (SAFE TO ADD) */
+    /* ================================ */
+
+    --breakpoint-sm: 640px;
+    --breakpoint-md: 768px;
+    --breakpoint-lg: 1024px;
+    --breakpoint-xl: 1280px;
+    --breakpoint-2xl: 1536px;
+}
